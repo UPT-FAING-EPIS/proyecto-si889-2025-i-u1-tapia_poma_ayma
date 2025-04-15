@@ -159,13 +159,24 @@ class _BalanceSummaryScreenState extends State<BalanceSummaryScreen> {
                       ),
 
                       const SizedBox(height: 24),
-                      const Text(
-                        'Últimas Transacciones',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.history, color: Colors.blue.shade700, size: 24),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Últimas Transacciones',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue.shade700,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+
                       const SizedBox(height: 8),
                       Expanded(
                         child: ListView.builder(
