@@ -9,62 +9,124 @@ class TextInvoiceScreen extends StatefulWidget {
 }
 
 class _TextInvoiceScreenState extends State<TextInvoiceScreen> {
-  final InvoiceViewModel _viewModel = InvoiceViewModel(apiKey: "AIzaSyAPwGfQo9eI2KubbXhabdH8ESDRR4s5Llo", userId: '');
+  final InvoiceViewModel _viewModel = InvoiceViewModel(
+    apiKey: "AIzaSyAPwGfQo9eI2KubbXhabdH8ESDRR4s5Llo",
+    userId: '',
+  );
   final TextEditingController _controller = TextEditingController();
   bool isLoading = false;
 
   Future<void> _processInvoice() async {
+    final inputText = _controller.text.trim();
+
+    if (inputText.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('El campo de factura no puede estar vacío.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     setState(() {
       isLoading = true;
     });
 
-    await _viewModel.processTextInvoice(_controller.text);
+    await _viewModel.processTextInvoice(inputText);
 
     setState(() {
       isLoading = false;
     });
 
-    if (_viewModel.lastError != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_viewModel.lastError!)),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Factura procesada correctamente.')),
-      );
-    }
+    final message = _viewModel.lastError ??
+        'Factura procesada correctamente.';
+    final color = _viewModel.lastError != null ? Colors.red : Colors.green;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: color),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ingresar Factura por Texto'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 32),
+            // Título con ícono
+            Row(
+              children: [
+                const Icon(Icons.receipt_long, color: Colors.green, size: 28),
+                const SizedBox(width: 8),
+                Text(
+                  'Factura por Texto',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green.shade800,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+
             const Text(
               'Ingresa la factura en formato de texto:',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _controller,
-              maxLines: 10,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Ejemplo:\nManzana 1.50\nDetergente 3.75\n...',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 20),
-            isLoading
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _processInvoice,
-                    child: const Text('Procesar Factura'),
+            const SizedBox(height: 12),
+
+            // Caja de texto dentro de un Card
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: TextField(
+                  controller: _controller,
+                  maxLines: 10,
+                  style: const TextStyle(fontSize: 16),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Ejemplo:\nManzana 1.50\nDetergente 3.75\n...',
                   ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Botón
+            SizedBox(
+              width: double.infinity,
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ElevatedButton.icon(
+                      onPressed: _processInvoice,
+                      icon: const Icon(Icons.upload_rounded),
+                      label: const Text('Procesar Factura'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+            ),
           ],
         ),
       ),
