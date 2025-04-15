@@ -119,7 +119,7 @@ class _BalanceSummaryScreenState extends State<BalanceSummaryScreen> {
                     children: [
                       // Título
                       Padding(
-                        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                        padding: const EdgeInsets.only(top: 34.0, bottom: 16.0),
                         child: Row(
                           children: [
                             const Icon(Icons.account_balance, color: Colors.green, size: 28),

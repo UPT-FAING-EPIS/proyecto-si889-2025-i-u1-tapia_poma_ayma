@@ -145,7 +145,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     children: [
                       // Título bonito
                       Padding(
-                          padding: const EdgeInsets.only(top: 32.0, bottom: 16.0),
+                          padding: const EdgeInsets.only(top: 34.0, bottom: 16.0),
 
                         child: Row(
                           children: [
