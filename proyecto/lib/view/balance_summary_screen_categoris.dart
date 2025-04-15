@@ -43,12 +43,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     });
 
     try {
-      // Cargar datos de las facturas
       await _invoiceViewModel.loadAndProcessData();
       totalSpent = _invoiceViewModel.getTotalSum();
       allPurchases = _invoiceViewModel.allPurchases;
 
-      // Cargar el balance del usuario
       await _balanceViewModel.loadBalance();
       availableBalance = _balanceViewModel.getBalance();
     } catch (e) {
@@ -72,6 +70,46 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         builder: (context) => FilteredPurchasesScreen(
           category: category,
           filteredPurchases: filteredPurchases,
+        ),
+      ),
+    );
+  }
+
+  Widget buildInfoCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color color,
+  }) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: color.withOpacity(0.1),
+              child: Icon(icon, color: color),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label,
+                    style: TextStyle(fontSize: 14, color: Colors.grey[700])),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -105,67 +143,95 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Mostrar el balance y los gastos
-                      Text(
-                        'Saldo Total: \$${availableBalance.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
+                      // Título bonito
+                      Padding(
+                          padding: const EdgeInsets.only(top: 32.0, bottom: 16.0),
+
+                        child: Row(
+                          children: [
+                            const Icon(Icons.pie_chart, color: Colors.green, size: 28),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Gastos por Categorías',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green.shade800,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Gasto Total: \$${totalSpent.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
+
+                      // Info Financiera
+                      buildInfoCard(
+                        icon: Icons.account_balance_wallet,
+                        label: 'Saldo Total',
+                        value: '\$${availableBalance.toStringAsFixed(2)}',
+                        color: Colors.green,
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Dinero Restante: \$${(availableBalance - totalSpent).toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: (availableBalance - totalSpent) >= 0
-                              ? Colors.green
-                              : Colors.red,
-                        ),
+                      buildInfoCard(
+                        icon: Icons.trending_down,
+                        label: 'Gasto Total',
+                        value: '\$${totalSpent.toStringAsFixed(2)}',
+                        color: Colors.red,
+                      ),
+                      buildInfoCard(
+                        icon: Icons.attach_money,
+                        label: 'Dinero Restante',
+                        value:
+                            '\$${(availableBalance - totalSpent).toStringAsFixed(2)}',
+                        color: (availableBalance - totalSpent) >= 0
+                            ? Colors.green
+                            : Colors.red,
                       ),
                       const SizedBox(height: 24),
 
-                      // Mostrar los botones de categorías
+                      // Botones de Categoría
                       Expanded(
                         child: GridView.builder(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, // Número de columnas
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
                             crossAxisSpacing: 16.0,
                             mainAxisSpacing: 16.0,
-                            childAspectRatio: 1.0, // Hace que los botones sean cuadrados
+                            childAspectRatio: 1.0,
                           ),
                           itemCount: categories.length,
                           itemBuilder: (context, index) {
                             return ElevatedButton(
                               onPressed: () {
-                                _navigateToFilteredPurchases(categories[index]);
+                                _navigateToFilteredPurchases(
+                                    categories[index]);
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(16.0),
-                                backgroundColor: Colors.green, // Color verde para los botones
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.green.shade800,
+                                elevation: 4,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0), // Sin bordes redondeados
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
+                                shadowColor: Colors.green.withOpacity(0.3),
                               ),
-                              child: Text(
-                                categories[index],
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.category,
+                                    size: 32,
+                                    color: Colors.green.shade700,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    categories[index],
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           },

@@ -11,7 +11,6 @@ class UserBalanceScreen extends StatefulWidget {
 class _UserBalanceScreenState extends State<UserBalanceScreen> {
   final UserBalanceViewModel _viewModel = UserBalanceViewModel();
   final TextEditingController _balanceController = TextEditingController();
-  String userId = "12345"; // ID del usuario (puedes obtenerlo dinámicamente)
   bool isLoading = true;
 
   @override
@@ -71,41 +70,103 @@ class _UserBalanceScreenState extends State<UserBalanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Configurar Balance'),
-      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Ingrese el monto:',
-                    style: TextStyle(fontSize: 16),
+                  // Título estilizado como en "Gastos por Categorías"
+                  const SizedBox(height: 32),
+                  Row(
+                    children: [
+                      const Icon(Icons.account_balance_wallet,
+                          color: Colors.green, size: 28),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Configurar Balance',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green.shade800,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _balanceController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Monto',
-                      prefixText: '\$',
+                  const SizedBox(height: 24),
+
+                  const Text(
+                    'Monto actual:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: _addToBalance,
-                        child: const Text('Agregar'),
+                  const SizedBox(height: 12),
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 20),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.attach_money,
+                              size: 28, color: Colors.green),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TextField(
+                              controller: _balanceController,
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(fontSize: 18),
+                              decoration: const InputDecoration(
+                                labelText: 'Monto',
+                                prefixText: '\$',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      ElevatedButton(
-                        onPressed: _replaceBalance,
-                        child: const Text('Reemplazar'),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: _addToBalance,
+                          icon: const Icon(Icons.add),
+                          label: const Text('Agregar'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            textStyle: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: _replaceBalance,
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Reemplazar'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            textStyle: const TextStyle(fontSize: 16),
+                          ),
+                        ),
                       ),
                     ],
                   ),
