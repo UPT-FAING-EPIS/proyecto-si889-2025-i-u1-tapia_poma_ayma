@@ -1,55 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../viewmodels/invoice_viewmodel.dart';
 
-class TextInvoiceScreen extends StatefulWidget {
+class TextInvoiceScreen extends StatelessWidget {
   const TextInvoiceScreen({super.key});
 
   @override
-  State<TextInvoiceScreen> createState() => _TextInvoiceScreenState();
-}
-
-class _TextInvoiceScreenState extends State<TextInvoiceScreen> {
-  final InvoiceViewModel _viewModel = InvoiceViewModel(
-    apiKey: "AIzaSyAPwGfQo9eI2KubbXhabdH8ESDRR4s5Llo",
-    userId: '',
-  );
-  final TextEditingController _controller = TextEditingController();
-  bool isLoading = false;
-
-  Future<void> _processInvoice() async {
-    final inputText = _controller.text.trim();
-
-    if (inputText.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('El campo de factura no puede estar vacío.'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    setState(() {
-      isLoading = true;
-    });
-
-    await _viewModel.processTextInvoice(inputText);
-
-    setState(() {
-      isLoading = false;
-    });
-
-    final message = _viewModel.lastError ??
-        'Factura procesada correctamente.';
-    final color = _viewModel.lastError != null ? Colors.red : Colors.green;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: color),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Accede al InvoiceViewModel desde el contexto
+    final invoiceViewModel = Provider.of<InvoiceViewModel>(context);
+    final TextEditingController _controller = TextEditingController();
+
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -108,10 +69,33 @@ class _TextInvoiceScreenState extends State<TextInvoiceScreen> {
             // Botón
             SizedBox(
               width: double.infinity,
-              child: isLoading
+              child: invoiceViewModel.isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : ElevatedButton.icon(
-                      onPressed: _processInvoice,
+                      onPressed: () async {
+                        final inputText = _controller.text.trim();
+
+                        if (inputText.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('El campo de factura no puede estar vacío.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        // Llamar al método para procesar la factura
+                        await invoiceViewModel.processTextInvoice(inputText);
+
+                        final message = invoiceViewModel.lastError ??
+                            'Factura procesada correctamente.';
+                        final color = invoiceViewModel.lastError != null ? Colors.red : Colors.green;
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(message), backgroundColor: color),
+                        );
+                      },
                       icon: const Icon(Icons.upload_rounded),
                       label: const Text('Procesar Factura'),
                       style: ElevatedButton.styleFrom(

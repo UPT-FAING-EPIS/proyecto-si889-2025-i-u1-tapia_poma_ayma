@@ -5,6 +5,7 @@ import 'package:idea1/view/screens/home/home_screen.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'viewmodels/auth_viewmodel.dart';
+import 'viewmodels/invoice_viewmodel.dart'; // Asegúrate de importar InvoiceViewModel
 import 'core/routes/go_router.dart'; // ✅ tu nuevo archivo con GoRouter
 
 void main() async {
@@ -19,8 +20,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AuthViewModel(),
+    return MultiProvider(
+      providers: [
+        // Proveedor de autenticación
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
+
+        // Proveedor de InvoiceViewModel para manejar el análisis de facturas
+        ChangeNotifierProvider(
+          create: (_) => InvoiceViewModel(
+            apiKey: 'AIzaSyAPwGfQo9eI2KubbXhabdH8ESDRR4s5Llo', // Usa tu API Key
+            userId: '1234', // Usa el ID de usuario que necesites
+          ),
+        ),
+      ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Gestión Financiera',
