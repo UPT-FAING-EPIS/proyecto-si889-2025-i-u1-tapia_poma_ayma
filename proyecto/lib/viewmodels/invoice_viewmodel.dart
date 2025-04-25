@@ -1,11 +1,11 @@
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:idea1/core/utils/formato_json.dart';
 import 'package:idea1/viewmodels/image_picker_service.dart';
 import 'package:intl/intl.dart'; // Importa el paquete para formatear fechas
 
-
-class InvoiceViewModel {
+class InvoiceViewModel extends ChangeNotifier {
   final GenerativeModel _model;
   late final ChatSession _chat;
   final ImagePickerService _imagePickerService = ImagePickerService();
@@ -15,6 +15,7 @@ class InvoiceViewModel {
   bool isLoading = false;
   Uint8List? currentImage;
   String? lastError;
+
   InvoiceViewModel({required String apiKey, required this.userId})
       : _model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey) {
     _chat = _model.startChat();
@@ -24,6 +25,7 @@ class InvoiceViewModel {
   Future<void> analyzeImage(Uint8List imageBytes) async {
     isLoading = true;
     messages.add("Analizando factura...");
+    notifyListeners();  // Notificar a los oyentes de los cambios
 
     try {
       final response = await _chat.sendMessage(
@@ -36,12 +38,15 @@ class InvoiceViewModel {
       if (response.text != null) {
         messages.add(response.text!);
         await FileUtils.saveResponseToJson(response.text!); // Guarda el texto en un archivo JSON
+        notifyListeners();  // Notificar a los oyentes de los cambios
       }
     } catch (e) {
       lastError = 'Error al analizar la imagen: ${e.toString()}';
       messages.add(lastError!);
+      notifyListeners();  // Notificar a los oyentes de los cambios
     } finally {
       isLoading = false;
+      notifyListeners();  // Notificar a los oyentes de los cambios
     }
   }
 
@@ -50,6 +55,7 @@ class InvoiceViewModel {
     try {
       isLoading = true;
       messages.add("Procesando factura de texto...");
+      notifyListeners();  // Notificar a los oyentes de los cambios
 
       final response = await _chat.sendMessage(
         Content.text(_getTextAnalysisPrompt(invoiceText, userId)), // Pasamos el userId
@@ -58,12 +64,15 @@ class InvoiceViewModel {
       if (response.text != null) {
         messages.add(response.text!);
         await FileUtils.saveResponseToJson(response.text!); // Guarda el texto en un archivo JSON
+        notifyListeners();  // Notificar a los oyentes de los cambios
       }
     } catch (e) {
       lastError = 'Error al procesar la factura de texto: ${e.toString()}';
       messages.add(lastError!);
+      notifyListeners();  // Notificar a los oyentes de los cambios
     } finally {
       isLoading = false;
+      notifyListeners();  // Notificar a los oyentes de los cambios
     }
   }
 
@@ -79,6 +88,7 @@ class InvoiceViewModel {
     } catch (e) {
       lastError = 'Error al seleccionar imagen: ${e.toString()}';
       messages.add(lastError!);
+      notifyListeners();  // Notificar a los oyentes de los cambios
     }
   }
 
@@ -94,6 +104,7 @@ class InvoiceViewModel {
     } catch (e) {
       lastError = 'Error al capturar imagen: ${e.toString()}';
       messages.add(lastError!);
+      notifyListeners();  // Notificar a los oyentes de los cambios
     }
   }
 
@@ -103,15 +114,16 @@ class InvoiceViewModel {
     currentImage = null;
     lastError = null;
     isLoading = false;
+    notifyListeners();  // Notificar a los oyentes de los cambios
   }
 
-    // Método para obtener la fecha actual en el formato deseado
+  // Método para obtener la fecha actual en el formato deseado
   String _getCurrentDate() {
     final now = DateTime.now();
     return DateFormat('dd/MM/yyyy').format(now); // Formato: "día/mes/año"
   }
 
-// Prompts reutilizables
+  // Prompts reutilizables
   String _getAnalysisPrompt(String userId) {
     final currentDate = _getCurrentDate(); // Obtén la fecha actual
     return """
@@ -121,9 +133,9 @@ class InvoiceViewModel {
       (Categorías: Alimentos, Hogar, Ropa, Salud, Tecnología, Entretenimiento, Transporte, Mascotas, Otros:otros no pertenece a 
       ninguna de las otras categorías),el nombre del producto,el precio, el usuario(El nombre de usuario ya esta definodo) y la fecha.Que estén en un formato json.
       Si la fecha no se especifica, usa la fecha actual: $currentDate.
-      Si lo que se te entrega no es una factura, no respondas nada.
+      Si lo que se entrega no es una factura, no respondas nada.
       Si la fecha está en el futuro reemplaza la fecha por la fecha actual: $currentDate.
-      Si lo que se te entrega no son datos como precios o productos, no respondas nada.
+      Si lo que se entrega no son datos como precios o productos, no respondas nada.
       No tomar en cuenta las horas, minutos y segundos de la fecha.
       Ejemplo de tipo de respuesta que quiero:
         {
@@ -149,7 +161,7 @@ class InvoiceViewModel {
       (Categorías: Alimentos, Hogar, Ropa, Salud, Tecnología, Entretenimiento, Transporte, Mascotas, Otros:otros no pertenece a 
       ninguna de las otras categorías),el nombre del producto,el precio, el usuario(El nombre de usuario ya esta definodo) y la fecha.Que estén en un formato json.
       Si la fecha no se especifica, usa la fecha actual: $currentDate.
-      Si lo que se te entrega no son datos como precios o productos, no respondas nada.
+      Si lo que se entrega no son datos como precios o productos, no respondas nada.
       Si la fecha está en el futuro reemplaza la fecha por la fecha actual: $currentDate.
       No tomar en cuenta las horas, minutos y segundos de la fecha.
       Ejemplo de tipo de respuesta que quiero:
