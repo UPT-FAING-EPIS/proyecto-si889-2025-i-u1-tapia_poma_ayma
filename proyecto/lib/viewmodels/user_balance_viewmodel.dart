@@ -1,10 +1,9 @@
-
 import 'package:idea1/domain/models/user_balance_model.dart';
 import 'package:idea1/services/user_balance_storage_service.dart';
 
 class UserBalanceViewModel {
   UserBalance? userBalance;
-  double _totalSpent = 0.0; // 🔹 Nuevo campo
+  double _totalSpent = 0.0;
 
   // Carga el balance del usuario desde el servicio
   Future<void> loadBalance() async {
@@ -25,15 +24,18 @@ class UserBalanceViewModel {
     return userBalance?.balance ?? 0.0;
   }
 
-  // 🔹 Establecer el gasto total para cálculos posteriores
+  // Establecer el gasto total para cálculos posteriores
   void setTotalSpent(double spent) {
     _totalSpent = spent;
   }
 
-  // 🔹 Devuelve el dinero restante
+  // Obtener gasto total
+  double get totalSpent => _totalSpent;
+
+  // Obtener dinero restante
   double get remainingBalance => getBalance() - _totalSpent;
 
-  // 🔹 Determina si el balance es positivo
+  // Determina si el balance es positivo
   bool get isInPositive => remainingBalance >= 0;
 
   // Agrega una cantidad al balance actual

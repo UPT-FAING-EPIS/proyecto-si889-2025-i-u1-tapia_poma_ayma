@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:idea1/core/utils/extensions.dart';
 import '../viewmodels/json_table.dart';
 import '../viewmodels/user_balance_viewmodel.dart';
 
@@ -14,8 +15,6 @@ class _BalanceSummaryScreenState extends State<BalanceSummaryScreen> {
   final UserBalanceViewModel _balanceViewModel = UserBalanceViewModel();
   bool isLoading = true;
   String? errorMessage;
-  double totalSpent = 0.0;
-  double availableBalance = 0.0;
   List<Map<String, dynamic>> transactions = [];
 
   @override
@@ -32,10 +31,10 @@ class _BalanceSummaryScreenState extends State<BalanceSummaryScreen> {
 
     try {
       await _invoiceViewModel.loadAndProcessData();
-      totalSpent = _invoiceViewModel.getTotalSum();
+      final totalSpent = _invoiceViewModel.getTotalSum();
 
       await _balanceViewModel.loadBalance();
-      availableBalance = _balanceViewModel.getBalance();
+      _balanceViewModel.setTotalSpent(totalSpent);
 
       transactions = _invoiceViewModel.allPurchases;
     } catch (e) {
@@ -70,8 +69,7 @@ class _BalanceSummaryScreenState extends State<BalanceSummaryScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[700])),
+                Text(label, style: TextStyle(fontSize: 14, color: Colors.grey[700])),
                 const SizedBox(height: 4),
                 Text(
                   value,
@@ -135,48 +133,46 @@ class _BalanceSummaryScreenState extends State<BalanceSummaryScreen> {
                           ],
                         ),
                       ),
-
-                      // Tarjetas de saldo/gasto/restante
+                      
                       buildInfoCard(
                         icon: Icons.account_balance_wallet,
                         label: 'Saldo Total',
-                        value: '\$${availableBalance.toStringAsFixed(2)}',
+                        value: _balanceViewModel.getBalance().toCurrency(),
                         color: Colors.green,
                       ),
                       buildInfoCard(
                         icon: Icons.trending_down,
                         label: 'Gasto Total',
-                        value: '\$${totalSpent.toStringAsFixed(2)}',
+                        value: _balanceViewModel.totalSpent.toCurrency(),
                         color: Colors.red,
                       ),
                       buildInfoCard(
                         icon: Icons.attach_money,
                         label: 'Dinero Restante',
-                        value: '\$${(availableBalance - totalSpent).toStringAsFixed(2)}',
-                        color: (availableBalance - totalSpent) >= 0
-                            ? Colors.green
-                            : Colors.red,
+                        value: _balanceViewModel.remainingBalance.toCurrency(),
+                        color: _balanceViewModel.isInPositive ? Colors.green : Colors.red,
                       ),
 
                       const SizedBox(height: 24),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.history, color: Colors.blue.shade700, size: 24),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Últimas Transacciones',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue.shade700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
 
+                      // Transacciones recientes
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.history, color: Colors.blue.shade700, size: 24),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Últimas Transacciones',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue.shade700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       const SizedBox(height: 8),
                       Expanded(
                         child: ListView.builder(
@@ -192,7 +188,7 @@ class _BalanceSummaryScreenState extends State<BalanceSummaryScreen> {
                               child: ListTile(
                                 leading: const Icon(Icons.shopping_cart, color: Colors.blue),
                                 title: Text(
-                                  '${transaction['producto']}: \$${transaction['precio'].toStringAsFixed(2)}',
+                                  '${transaction['producto']}: ${(transaction['precio'] as double).toCurrency()}',
                                   style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: Text(
