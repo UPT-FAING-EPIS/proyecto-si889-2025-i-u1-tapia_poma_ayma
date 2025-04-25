@@ -1,21 +1,22 @@
 
-import 'package:idea1/domain/models/user_balance.dart';
+import 'package:idea1/domain/models/user_balance_model.dart';
+import 'package:idea1/services/user_balance_storage_service.dart';
 
 class UserBalanceViewModel {
   UserBalance? userBalance;
 
-  // Carga el balance del usuario desde el archivo
+  // Carga el balance del usuario desde el servicio
   Future<void> loadBalance() async {
-    userBalance = await UserBalance.loadFromFile();
+    userBalance = await UserBalanceStorageService.load();
     userBalance ??= UserBalance(userId: 'default_user', balance: 0.0);
   }
 
-  // Guarda el balance del usuario en el archivo
+  // Guarda el balance del usuario usando el servicio
   Future<void> saveBalance() async {
     if (userBalance == null) {
       throw Exception('El balance no está inicializado.');
     }
-    await UserBalance.saveToFile(userBalance!);
+    await UserBalanceStorageService.save(userBalance!);
   }
 
   // Obtiene el balance actual

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:idea1/utils/formato_json.dart';
+import 'package:idea1/core/utils/formato_json.dart';
 import 'package:idea1/viewmodels/image_picker_service.dart';
 import 'package:intl/intl.dart'; // Importa el paquete para formatear fechas
 

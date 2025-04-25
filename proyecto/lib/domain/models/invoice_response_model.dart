@@ -1,5 +1,5 @@
 
-import 'package:idea1/domain/models/invoice_item.dart';
+import 'package:idea1/domain/models/invoice_item_model.dart';
 
 class InvoiceResponse {
   final List<InvoiceItem> purchases;
