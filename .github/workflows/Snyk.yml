@@ -27,8 +27,8 @@ jobs:
 
       - name: Run Snyk to check vulnerabilities
         uses: snyk/actions@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: test
-          args: --file=proyecto/pubspec.yaml
+          args: "--file=proyecto/pubspec.yaml --package-manager=pub"
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
