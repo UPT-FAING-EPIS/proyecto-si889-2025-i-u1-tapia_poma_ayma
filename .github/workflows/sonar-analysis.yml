@@ -26,8 +26,13 @@ jobs:
         cd proyecto  # Cambiar al directorio correcto
         flutter pub get
 
+    - name: Ensure test directory exists
+      run: |
+        mkdir -p proyecto/test
+
     - name: Skip tests if none exist
       run: |
+        cd proyecto
         if [ -d "test" ] && [ "$(find test -name '*_test.dart' | wc -l)" -gt 0 ]; then
           flutter test
         else
@@ -39,7 +44,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         docker run --rm \
-          -v $GITHUB_WORKSPACE:/usr/src \
+          -v $GITHUB_WORKSPACE/proyecto:/usr/src \
           -e SONARQUBE_SCANNER_PARAMS="{
             \"sonar.projectKey\": \"erickorganizacion_proyecto\",
             \"sonar.organization\": \"erickorganizacion\",
