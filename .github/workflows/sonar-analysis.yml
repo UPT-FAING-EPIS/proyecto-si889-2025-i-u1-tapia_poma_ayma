@@ -9,50 +9,39 @@ on:
       - main
 
 jobs:
-  sonar_analysis:
+  analyze:
+    name: Analyze on SonarCloud
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.29.3'
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.6' # o la versión que uses
 
-    - name: Install dependencies
-      run: |
-        cd proyecto  # Cambiar al directorio correcto
-        flutter pub get
+      - name: Install dependencies
+        run: flutter pub get
 
-    - name: Ensure test directory exists
-      run: |
-        mkdir -p proyecto/test
+      - name: Run tests with coverage
+        run: flutter test --coverage
 
-    - name: Skip tests if none exist
-      run: |
-        cd proyecto
-        if [ -d "test" ] && [ "$(find test -name '*_test.dart' | wc -l)" -gt 0 ]; then
-          flutter test
-        else
-          echo "No test files found, skipping tests..."
-        fi
-
-    - name: Run SonarQube analysis with Docker (Debug mode)
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: |
-        docker run --rm \
-          -v $GITHUB_WORKSPACE/proyecto:/usr/src \
-          -e SONARQUBE_SCANNER_PARAMS="{
-            \"sonar.projectKey\": \"erickorganizacion_proyecto\",
-            \"sonar.organization\": \"erickorganizacion\",
-            \"sonar.host.url\": \"https://sonarcloud.io\",
-            \"sonar.login\": \"$SONAR_TOKEN\",
-            \"sonar.sources\": \"lib\",
-            \"sonar.tests\": \"test\",
-            \"sonar.inclusions\": \"**/*.dart\",
-            \"sonar.projectBaseDir\": \"/usr/src\"
-          }" \
-          sonarsource/sonar-scanner-cli:latest -X
+      - name: Upload coverage to SonarCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          unzip sonar-scanner.zip
+          ./sonar-scanner-*/bin/sonar-scanner \
+            -Dsonar.projectKey=erickorganizacion_proyecto \
+            -Dsonar.organization=erickorganizacion \
+            -Dsonar.sources=lib \
+            -Dsonar.tests=test \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${SONAR_TOKEN} \
+            -Dsonar.dart.lcov.reportPaths=coverage/lcov.info \
+            -Dsonar.exclusions=**/*.g.dart,**/*.freezed.dart,**/*.mocks.dart \
+            -Dsonar.inclusions=**/*.dart \
+            -Dsonar.projectBaseDir=.
