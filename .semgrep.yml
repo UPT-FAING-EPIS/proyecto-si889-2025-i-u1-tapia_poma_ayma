@@ -1,0 +1,65 @@
+rules:
+  # Evitar contraseñas hardcodeadas
+  - id: avoid-hardcoded-passwords
+    patterns:
+      - pattern: $VAR = "$SECRET"
+      - pattern-not: $VAR = ""
+    message: "Evita hardcodear contraseñas o secretos en el código."
+    languages: [dart]
+    severity: ERROR
+
+  # Manejo adecuado de excepciones
+  - id: avoid-empty-catch-blocks
+    pattern: |
+      try {
+        ...
+      } catch (e) {
+      }
+    message: "Evita bloques catch vacíos. Maneja las excepciones adecuadamente."
+    languages: [dart]
+    severity: WARNING
+
+  # Uso adecuado de async/await
+  - id: async-await-check
+    pattern: |
+      await $ASYNC_FUNCTION(...)
+    message: "Asegúrate de manejar las operaciones asíncronas correctamente con 'try/catch'."
+    languages: [dart]
+    severity: INFO
+
+  # Evitar el uso de print en producción
+  - id: avoid-print-debug
+    pattern: print($MSG)
+    message: "Evita usar 'print' en producción. Usa logs o herramientas de depuración."
+    languages: [dart]
+    severity: WARNING
+
+  # Evitar variables no utilizadas
+  - id: avoid-unused-variables
+    pattern: var $VAR = $VALUE;
+    message: "Elimina las variables no utilizadas para mantener el código limpio."
+    languages: [dart]
+    severity: WARNING
+
+  # Evitar funciones largas
+  - id: avoid-long-functions
+    pattern: |
+      function $FUNC(...) {
+        $BODY
+      }
+    message: "Considera dividir las funciones largas en funciones más pequeñas para mejorar la legibilidad."
+    languages: [dart]
+    severity: INFO
+    metavariables:
+      $BODY:
+        min_lines: 50
+
+  # Evitar el uso de funciones obsoletas
+  - id: avoid-deprecated-functions
+    pattern: $FUNC(...)
+    message: "Evita usar funciones obsoletas. Consulta la documentación para alternativas."
+    languages: [dart]
+    severity: WARNING
+    metavariables:
+      $FUNC:
+        regex: "deprecatedFunctionName"
