@@ -29,41 +29,13 @@ jobs:
           cd proyecto
           flutter test || true
 
-      - name: Install Semgrep
-        run: |
-          # Instalar dependencias necesarias
-          sudo apt-get update
-          sudo apt-get install -y wget jq
-
-          # Descargar la última versión de Semgrep y verificar la URL
-          echo "Descargando la última versión de Semgrep..."
-          SEMGREP_URL=$(curl -s https://api.github.com/repos/returntocorp/semgrep/releases/latest | jq -r .assets[0].browser_download_url)
-          echo "URL de descarga de Semgrep: $SEMGREP_URL"
-
-          # Verificar si la URL es válida
-          if [[ -z "$SEMGREP_URL" ]]; then
-            echo "Error: No se pudo obtener la URL de descarga de Semgrep."
-            exit 1
-          fi
-
-          # Descargar e instalar Semgrep
-          wget -q -O semgrep.tar.gz "$SEMGREP_URL"
-
-          # Extraer y mover el binario
-          echo "Extrayendo semgrep..."
-          tar -xzf semgrep.tar.gz
-          chmod +x semgrep
-          sudo mv semgrep /usr/local/bin/
-
-          # Verificar la instalación de semgrep
-          semgrep --version
-
-      - name: Run Semgrep (custom rules)
-        run: |
-          semgrep --config .semgrep.yml --output semgrep-results.json --json
-
       - name: Check .semgrep.yml content
         run: cat .semgrep.yml  # Imprime el contenido del archivo .semgrep.yml para depuración
+
+      - name: 🕵️ Run Semgrep (custom rules)
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: .semgrep.yml  # Usa el archivo personalizado en tu repo
 
       - name: Deploy results to GitHub Pages
         run: |
