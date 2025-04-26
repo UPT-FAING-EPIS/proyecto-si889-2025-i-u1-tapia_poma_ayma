@@ -13,9 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout code
+    # Checkout the code
     - name: Checkout repository
       uses: actions/checkout@v2
+
+    # Set the working directory to the Flutter project root
+    - name: Set working directory
+      run: cd proyecto  # Asegúrate de estar en el directorio donde está pubspec.yaml
 
     # Set up Flutter
     - name: Set up Flutter
@@ -34,7 +38,7 @@ jobs:
     # Run SonarQube analysis
     - name: SonarQube analysis
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Agrega tu token de SonarQube
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         curl -sSLo sonarscanner.zip https://binaries.sonarsource.com/DownloadScanner/sonar-scanner-cli-4.7.0.2747-linux.zip
         unzip sonarscanner.zip
