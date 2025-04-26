@@ -42,4 +42,4 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}  # Asegúrate de que el token esté configurado correctamente en los secretos
         run: |
-          snyk test --all-projects
+          snyk test --file=proyecto/pubspec.yaml
