@@ -20,7 +20,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.7.0"  # Asegúrate de que esta versión sea compatible con Dart ^3.7.0
+          flutter-version: "3.7.3"  # Cambiamos a una versión específica para Flutter 3.7.x
 
       - name: Install dependencies
         run: |
