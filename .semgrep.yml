@@ -40,13 +40,3 @@ rules:
     message: "Elimina las variables no utilizadas para mantener el código limpio."
     languages: [dart]
     severity: WARNING
-
-  # Evitar el uso de funciones obsoletas
-  - id: avoid-deprecated-functions
-    pattern: $FUNC(...)
-    message: "Evita usar funciones obsoletas. Consulta la documentación para alternativas."
-    languages: [dart]
-    severity: WARNING
-    metavariables:
-      $FUNC:
-        regex: "deprecatedFunctionName"
