@@ -34,19 +34,20 @@ jobs:
           echo "No test files found, skipping tests..."
         fi
 
-    - name: Run SonarQube analysis with Docker
+    - name: Run SonarQube analysis with Docker (Debug mode)
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         docker run --rm \
           -v $GITHUB_WORKSPACE:/usr/src \
-          -e SONARQUBE_SCANNER_PARAMS='{
-            "sonar.projectKey": "erickorganizacion_proyecto",
-            "sonar.host.url": "https://sonarcloud.io",
-            "sonar.login": "$SONAR_TOKEN",
-            "sonar.sources": "lib",
-            "sonar.tests": "test",
-            "sonar.inclusions": "**/*.dart",
-            "sonar.projectBaseDir": "/usr/src"
-          }' \
-          sonarsource/sonar-scanner-cli:latest
+          -e SONARQUBE_SCANNER_PARAMS="{
+            \"sonar.projectKey\": \"erickorganizacion_proyecto\",
+            \"sonar.organization\": \"erickorganizacion\",
+            \"sonar.host.url\": \"https://sonarcloud.io\",
+            \"sonar.login\": \"$SONAR_TOKEN\",
+            \"sonar.sources\": \"lib\",
+            \"sonar.tests\": \"test\",
+            \"sonar.inclusions\": \"**/*.dart\",
+            \"sonar.projectBaseDir\": \"/usr/src\"
+          }" \
+          sonarsource/sonar-scanner-cli:latest -X
