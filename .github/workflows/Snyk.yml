@@ -1,4 +1,4 @@
-name: Snyk Flutter Analysis
+name: Flutter Audit
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  snyk:
+  audit:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,10 +25,6 @@ jobs:
         working-directory: proyecto
         run: flutter pub get
 
-      - name: Run Snyk to check vulnerabilities
-        uses: snyk/actions@master
-        with:
-          command: test
-          args: "--file=proyecto/pubspec.yaml --package-manager=pub"
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Run dart pub audit
+        working-directory: proyecto
+        run: dart pub audit
