@@ -1,4 +1,4 @@
-name: Flutter CI with SonarQube
+name: SonarQube Analysis
 
 on:
   push:
@@ -9,41 +9,41 @@ on:
       - main
 
 jobs:
-  build:
+  sonar_analysis:
     runs-on: ubuntu-latest
-
+    
     steps:
-    # Checkout the code
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v2
 
-    # Set the working directory to the Flutter project root
-    - name: Set working directory
-      run: cd proyecto  # Asegúrate de estar en el directorio donde está pubspec.yaml
-
-    # Set up Flutter
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.29.3'
 
-    # Install dependencies
     - name: Install dependencies
-      run: flutter pub get
-
-    # Run tests
-    - name: Run tests
-      run: flutter test
-
-    # Run SonarQube analysis
-    - name: SonarQube analysis
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
+        cd proyecto  # Cambiar al directorio correcto
+        flutter pub get
+
+    - name: Run tests
+      run: |
+        cd proyecto  # Cambiar al directorio correcto
+        flutter test
+
+    - name: Install SonarQube scanner
+      run: |
+        cd proyecto  # Cambiar al directorio correcto
         curl -sSLo sonarscanner.zip https://binaries.sonarsource.com/DownloadScanner/sonar-scanner-cli-4.7.0.2747-linux.zip
         unzip sonarscanner.zip
         export PATH=$PWD/sonar-scanner-4.7.0.2747-linux/bin:$PATH
+
+    - name: Run SonarQube analysis
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        cd proyecto  # Cambiar al directorio correcto
         sonar-scanner \
-          -Dsonar.projectKey=your_project_key \
-          -Dsonar.host.url=http://your-sonarqube-server.com \
+          -Dsonar.projectKey=erickorganizacion_proyecto \
+          -Dsonar.host.url=http://localhost:9000 \
           -Dsonar.login=$SONAR_TOKEN
