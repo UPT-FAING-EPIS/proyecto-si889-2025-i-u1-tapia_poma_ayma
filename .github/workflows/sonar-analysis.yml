@@ -23,14 +23,14 @@ jobs:
           flutter-version: "3.19.6"  # Usa la versión de Flutter que necesites
 
       - name: Install dependencies
-        run: flutter pub get
-
-      - name: Change directory to the project folder
-        run: cd proyecto  # Cambia 'proyecto' por el nombre de tu carpeta del proyecto si es necesario
+        run: |
+          cd proyecto  # Cambiar al directorio donde está el proyecto
+          flutter pub get
 
       - name: Run SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
+          cd proyecto  # Asegúrate de estar en la carpeta correcta
           flutter pub global activate sonar_flutter
           flutter pub global run sonar_flutter
