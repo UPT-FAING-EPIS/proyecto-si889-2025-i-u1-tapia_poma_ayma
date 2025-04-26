@@ -3,7 +3,7 @@ name: Build & Release Flutter App
 on:
   push:
     tags:
-      - 'v*'  # Se ejecuta cuando se hace push de un tag como v1.0.0
+      - 'v*'  # Se activa al hacer push de un tag tipo v1.0.0
 
 jobs:
   build:
@@ -17,10 +17,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.2'  # Cambia si usas otra versión
-
-      - name: Go to project folder
-        run: cd proyecto
+          flutter-version: '3.19.0'  # Compatible con Dart 3.7.0
 
       - name: Install dependencies
         run: |
