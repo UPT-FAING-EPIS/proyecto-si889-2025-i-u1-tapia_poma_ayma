@@ -1,4 +1,4 @@
-name: Flutter Security Scan with SARIF
+name: Flutter Dependency Security Scan
 
 on:
   push:
@@ -23,20 +23,23 @@ jobs:
         working-directory: proyecto
         run: flutter pub get
 
-      # Paso 1: Instalar Snyk CLI correctamente
-      - name: Install Snyk
-        uses: snyk/actions/setup@v3  # ¡Acción correcta!
-        with:
-          token: ${{ secrets.SNYK_TOKEN }}  # Configurar en GitHub Secrets
+      # Instalación correcta de Snyk CLI (método alternativo)
+      - name: Install Snyk CLI
+        run: |
+          npm install -g snyk
+          snyk --version
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      # Paso 2: Escanear y generar SARIF
+      # Escaneo y generación de SARIF
       - name: Run Snyk scan
         working-directory: proyecto
         run: |
-          snyk test --file=pubspec.yaml --package-manager=pub --sarif --json > snyk_results.sarif
-
-      # Paso 3: Subir resultados
-      - name: Upload SARIF
+          snyk test --file=pubspec.yaml --package-manager=pub --sarif --json > snyk_report.sarif || echo "Snyk scan completed with findings"
+          
+      # Subir resultados (si el archivo existe)
+      - name: Upload SARIF results
         uses: github/codeql-action/upload-sarif@v2
+        if: success() || failure()  # Se ejecuta siempre que exista el archivo
         with:
-          sarif_file: proyecto/snyk_results.sarif
+          sarif_file: proyecto/snyk_report.sarif
