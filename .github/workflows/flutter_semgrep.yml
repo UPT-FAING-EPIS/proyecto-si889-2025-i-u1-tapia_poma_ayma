@@ -1,4 +1,4 @@
-name: Flutter CI + Semgrep
+name: Semgrep
 
 on:
   push:
@@ -28,6 +28,9 @@ jobs:
         run: |
           cd proyecto
           flutter test || true
+
+      - name: Check .semgrep.yml content
+        run: cat .semgrep.yml  # Imprime el contenido del archivo .semgrep.yml para depuración
 
       - name: 🕵️ Run Semgrep (custom rules)
         uses: returntocorp/semgrep-action@v1
