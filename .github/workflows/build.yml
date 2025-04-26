@@ -1,40 +1,40 @@
-name: SonarCloud Analysis
+name: SonarCloud Sync
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master]
   pull_request:
-    types: [opened, synchronized, reopened]
+    types: [opened, reopened, synchronize]
 
 jobs:
-  sonarcloud:
-    runs-on: ubuntu-latest
+  sonarcloud-scan:
+    runs-on: windows-latest  # Usamos Windows para replicar tu entorno local
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.3'
-          channel: 'stable'
+          channel: stable
 
       - name: Install dependencies
         run: |
           cd proyecto
           flutter pub get
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@master
+      - name: Download SonarScanner (Windows)
+        run: |
+          Invoke-WebRequest -Uri "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip" -OutFile "sonar-scanner.zip"
+          Expand-Archive -Path "sonar-scanner.zip" -DestinationPath "C:\sonar-scanner" -Force
+          echo "C:\sonar-scanner\sonar-scanner-5.0.1.3006-windows\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+      - name: Run SonarScanner (EXACTO como lo haces localmente)
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: ./proyecto
-          # Opcional: Forzar análisis si el proyecto ya existe
-          args: >
-            -Dsonar.projectKey=erickorganizacion_proyecto
-            -Dsonar.organization=erickorganizacion
-            -Dsonar.host.url=https://sonarcloud.io
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Configura este secret en GitHub
+        run: |
+          cd proyecto
+          $env:SONAR_TOKEN="${{ secrets.SONAR_TOKEN1 }}"
+          C:\sonar-scanner\sonar-scanner-5.0.1.3006-windows\bin\sonar-scanner.bat
