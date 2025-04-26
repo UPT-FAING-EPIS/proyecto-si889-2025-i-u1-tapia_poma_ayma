@@ -25,16 +25,27 @@ jobs:
           cd proyecto
           flutter pub get
 
-      - name: Install SonarScanner (Windows)
+      - name: Download and Install SonarScanner
         run: |
-          # Descarga directa a la misma ruta que usas localmente
-          Invoke-WebRequest -Uri "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip" -OutFile "C:\sonar-scanner.zip"
-          Expand-Archive -Path "C:\sonar-scanner.zip" -DestinationPath "C:\" -Force
+          # Descargar el sonar-scanner
+          $scannerUrl = "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip"
+          $downloadPath = "$env:RUNNER_TEMP\sonar-scanner.zip"
+          $installPath = "C:\sonar-scanner"
+          
+          Invoke-WebRequest -Uri $scannerUrl -OutFile $downloadPath
+          Expand-Archive -Path $downloadPath -DestinationPath $installPath -Force
+          
+          # Agregar al PATH
+          $scannerBinPath = "$installPath\sonar-scanner-5.0.1.3006-windows\bin"
+          echo "::add-path::$scannerBinPath"
+          
+          # Verificar instalación
+          dir "$installPath\sonar-scanner-5.0.1.3006-windows\bin\sonar-scanner.bat"
+          if (-not $?) { exit 1 }
 
-      - name: Run SonarScanner (IDÉNTICO a tu comando local)
+      - name: Run SonarScanner
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Debe coincidir con tu token local
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN1 }}
         run: |
           cd proyecto
-          $env:SONAR_TOKEN="${{ secrets.SONAR_TOKEN1 }}"
-          C:\sonar-scanner\bin\sonar-scanner.bat  # ¡Misma ruta exacta!
+          sonar-scanner.bat -Dsonar.login=$env:SONAR_TOKEN
