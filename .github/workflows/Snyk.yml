@@ -29,13 +29,17 @@ jobs:
           cd proyecto
           flutter pub get
 
+      - name: Install Node.js (required for Snyk CLI)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Elige una versión compatible con Snyk
+
       - name: Install Snyk CLI
         run: |
           npm install -g snyk
 
       - name: Run Snyk Security Scan
         env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}  # Asegúrate de que el token esté configurado correctamente en los secretos
         run: |
-          snyk auth $SNYK_TOKEN
           snyk test --all-projects
