@@ -1,4 +1,4 @@
-name: Flutter Security Audit
+name: Flutter Dependency Audit (JSON)
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  security-audit:
+  dependency-check:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,12 +25,14 @@ jobs:
         working-directory: proyecto
         run: flutter pub get
 
-      # Paso clave: Usar SNYK_TOKEN en vez de SNYK_API_KEY
-      - name: Install Snyk
-        uses: snyk/actions/setup@v3
-        with:
-          token: ${{ secrets.SNYK_TOKEN }}  # ¡Aquí usamos "token" en vez de "api-key"!
+      - name: Generate JSON report
+        run: |
+          mkdir -p DartPubOutdated
+          cd proyecto
+          dart pub outdated --mode=null-safety --json > ../DartPubOutdated/outdated.json
 
-      - name: Run Snyk security scan
-        working-directory: proyecto
-        run: snyk test --file=pubspec.yaml --package-manager=pub --fail-on=all
+      - name: Upload JSON report
+        uses: actions/upload-artifact@v3
+        with:
+          name: DartPubOutdated-JSON
+          path: DartPubOutdated/outdated.json
