@@ -1,4 +1,4 @@
-name: Build
+name: SonarCloud Analysis
 
 on:
   push:
@@ -6,44 +6,30 @@ on:
       - main
       - master
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronized, reopened]
 
 jobs:
-  sonarqube:
-    name: SonarQube Analysis
+  sonarcloud:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Obligatorio para SonarQube
 
-      - name: Setup Flutter (3.29.3)
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.29.3'  # Versión específica
           channel: 'stable'
-          version: '3.29.3'
 
       - name: Install dependencies
         run: |
           cd proyecto
           flutter pub get
 
-      - name: Install SonarScanner (Linux)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openjdk-17-jdk
-          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-          unzip sonar-scanner-cli-5.0.1.3006-linux.zip
-          echo "$(pwd)/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
-
-      - name: Run SonarScanner (Equivalente a tu comando local)
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@master
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Reemplaza con tu token real o usa un secret
-        run: |
-          cd proyecto
-          sonar-scanner \
-            -Dsonar.login=$SONAR_TOKEN \
-            -Dsonar.projectKey=erickorganizacion_proyecto \
-            -Dsonar.organization=erickorganizacion \
-            -Dsonar.host.url=https://sonarcloud.io
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Configurar en GitHub Secrets
+        with:
+          projectBaseDir: ./proyecto  # Ruta a tu proyecto Flutter
