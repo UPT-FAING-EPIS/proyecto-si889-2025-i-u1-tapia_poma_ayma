@@ -21,17 +21,16 @@ jobs:
         with:
           flutter-version: '3.29.3'
 
-      # Si pubspec.yaml está en /proyecto/
       - name: Install dependencies
-        working-directory: proyecto  # Solo si está dentro de una carpeta "proyecto"
+        working-directory: proyecto
         run: flutter pub get
 
-      # Escaneo con Snyk (opcional)
-      - name: Run Snyk security scan
-        working-directory: proyecto  # Mismo directorio que arriba
-        run: snyk test --file=pubspec.yaml --package-manager=pub --fail-on=all
+      # Paso clave: Usar SNYK_TOKEN en vez de SNYK_API_KEY
+      - name: Install Snyk
+        uses: snyk/actions/setup@v3
+        with:
+          token: ${{ secrets.SNYK_TOKEN }}  # ¡Aquí usamos "token" en vez de "api-key"!
 
-      # Alternativa sin Snyk
-      - name: Check outdated packages
+      - name: Run Snyk security scan
         working-directory: proyecto
-        run: dart pub outdated --mode=null-safety
+        run: snyk test --file=pubspec.yaml --package-manager=pub --fail-on=all
