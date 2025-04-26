@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Necesario para análisis preciso
+          fetch-depth: 0
 
       - name: Setup Flutter (3.29.3)
         uses: subosito/flutter-action@v2
@@ -35,13 +35,11 @@ jobs:
           sudo apt-get install -y openjdk-17-jdk
           wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
           unzip sonar-scanner-cli-5.0.1.3006-linux.zip
-          sudo mv sonar-scanner-5.0.1.3006-linux /opt/sonar-scanner
-          echo 'export PATH="$PATH:/opt/sonar-scanner/bin"' >> ~/.bashrc
-          source ~/.bashrc
+          echo "$(pwd)/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH  # Método correcto para PATH
 
-      - name: Run SonarScanner (Local Analysis + Upload to SonarCloud)
+      - name: Run SonarScanner
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Asegúrate de tener este secret en GitHub
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd proyecto
           sonar-scanner -Dsonar.login=$SONAR_TOKEN
