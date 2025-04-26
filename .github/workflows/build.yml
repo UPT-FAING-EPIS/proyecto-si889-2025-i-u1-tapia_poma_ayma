@@ -25,9 +25,13 @@ jobs:
           version: '3.29.3'
 
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          cd proyecto  # Cambiar al directorio del proyecto
+          flutter pub get
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: ./proyecto  # Especifica el directorio base correcto
