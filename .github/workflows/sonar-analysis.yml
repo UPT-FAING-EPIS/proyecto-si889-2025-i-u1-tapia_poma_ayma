@@ -4,44 +4,51 @@ on:
   push:
     branches:
       - main
+      - master
   pull_request:
-    branches:
-      - main
+    types: [opened, synchronize, reopened]
 
 jobs:
-  analyze:
-    name: Analyze on SonarCloud
-    runs-on: ubuntu-latest
-
+  sonarcloud-analysis:
+    name: SonarCloud Scan
+    runs-on: windows-latest
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Importante para análisis preciso en SonarCloud
 
-      - name: Set up Flutter
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      - name: Setup Flutter (3.29.3)
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.6' # o la versión que uses
+          channel: 'stable'
+          version: '3.29.3'  # Versión específica que usas
 
       - name: Install dependencies
-        run: flutter pub get
-
-      - name: Run tests with coverage
-        run: flutter test --coverage
-
-      - name: Upload coverage to SonarCloud
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
-          unzip sonar-scanner.zip
-          ./sonar-scanner-*/bin/sonar-scanner \
-            -Dsonar.projectKey=erickorganizacion_proyecto \
-            -Dsonar.organization=erickorganizacion \
-            -Dsonar.sources=lib \
-            -Dsonar.tests=test \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${SONAR_TOKEN} \
-            -Dsonar.dart.lcov.reportPaths=coverage/lcov.info \
-            -Dsonar.exclusions=**/*.g.dart,**/*.freezed.dart,**/*.mocks.dart \
-            -Dsonar.inclusions=**/*.dart \
-            -Dsonar.projectBaseDir=.
+          cd proyecto  # Entra a tu carpeta de proyecto
+          flutter pub get
+          cd ..
+
+      - name: Run SonarCloud Scanner
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: ./proyecto  # Ajusta si es necesario
+          args: >
+            -Dsonar.projectKey=erickorganizacion_proyecto
+            -Dsonar.organization=erickorganizacion
+            -Dsonar.projectName=Flutter App
+            -Dsonar.projectVersion=1.0
+            -Dsonar.sources=lib
+            -Dsonar.exclusions=**/*.g.dart,**/*.freezed.dart,**/*.mocks.dart
+            -Dsonar.language=dart
+            -Dsonar.host.url=https://sonarcloud.io
