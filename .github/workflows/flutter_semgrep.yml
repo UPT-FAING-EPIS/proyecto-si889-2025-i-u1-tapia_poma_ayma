@@ -35,9 +35,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget jq
 
-          # Descargar e instalar la última versión de semgrep
+          # Descargar la última versión de Semgrep y verificar la URL
           echo "Descargando la última versión de Semgrep..."
-          curl -s https://api.github.com/repos/returntocorp/semgrep/releases/latest | jq -r .assets[0].browser_download_url | xargs wget -q -O semgrep.tar.gz
+          SEMGREP_URL=$(curl -s https://api.github.com/repos/returntocorp/semgrep/releases/latest | jq -r .assets[0].browser_download_url)
+          echo "URL de descarga de Semgrep: $SEMGREP_URL"
+
+          # Verificar si la URL es válida
+          if [[ -z "$SEMGREP_URL" ]]; then
+            echo "Error: No se pudo obtener la URL de descarga de Semgrep."
+            exit 1
+          fi
+
+          # Descargar e instalar Semgrep
+          wget -q -O semgrep.tar.gz "$SEMGREP_URL"
 
           # Extraer y mover el binario
           echo "Extrayendo semgrep..."
