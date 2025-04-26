@@ -11,42 +11,45 @@ on:
 jobs:
   sonar_analysis:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.29.3'
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
 
-    - name: Install dependencies
-      run: |
-        cd proyecto  # Cambiar al directorio correcto
-        flutter pub get
+      - name: Install dependencies
+        run: |
+          cd proyecto
+          flutter pub get
 
-    - name: Skip tests if none exist
-      run: |
-        if [ -d "test" ] && [ "$(find test -name '*_test.dart' | wc -l)" -gt 0 ]; then
-          flutter test
-        else
-          echo "No test files found, skipping tests..."
-        fi
+      - name: Skip tests if none exist
+        run: |
+          cd proyecto
+          mkdir -p test  # Crea carpeta vacía si no existe
+          if [ "$(find test -name '*_test.dart' | wc -l)" -gt 0 ]; then
+            flutter test
+          else
+            echo "No test files found, skipping tests..."
+          fi
 
-    - name: Install SonarQube scanner
-      run: |
-        cd proyecto  # Cambiar al directorio correcto
-        curl -sSLo sonarscanner.zip https://binaries.sonarsource.com/DownloadScanner/sonar-scanner-cli-4.7.0.2747-linux.zip
-        unzip sonarscanner.zip
-        export PATH=$PWD/sonar-scanner-4.7.0.2747-linux/bin:$PATH
+      - name: Install SonarQube scanner
+        run: |
+          cd proyecto
+          curl -L -o sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonarscanner.zip
+          echo "$PWD/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
 
-    - name: Run SonarQube analysis
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: |
-        cd proyecto  # Cambiar al directorio correcto
-        sonar-scanner \
-          -Dsonar.projectKey=erickorganizacion_proyecto \
-          -Dsonar.host.url=http://localhost:9000 \
-          -Dsonar.login=$SONAR_TOKEN
+      - name: Run SonarQube analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          cd proyecto
+          sonar-scanner \
+            -Dsonar.projectKey=erickorganizacion_proyecto \
+            -Dsonar.sources=lib \
+            -Dsonar.host.url=http://localhost:9000 \
+            -Dsonar.login=$SONAR_TOKEN
