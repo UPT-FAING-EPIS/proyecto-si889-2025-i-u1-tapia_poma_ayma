@@ -11,28 +11,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout el código fuente del repositorio
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Configura Flutter en la versión especificada
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.3'
 
+      # Instalar las dependencias del proyecto
       - name: 📦 Install dependencies
         run: |
           cd proyecto
           flutter pub get
 
+      # Ejecutar pruebas de Flutter (opcional)
       - name: 🧪 Run tests
         run: |
           cd proyecto
           flutter test || true
 
-      - name: Check .semgrep.yml content
-        run: cat .semgrep.yml  # Imprime el contenido del archivo .semgrep.yml para depuración
-
+      # Ejecutar Semgrep con las reglas personalizadas
       - name: 🕵️ Run Semgrep (custom rules)
         uses: returntocorp/semgrep-action@v1
         with:
-          config: .semgrep.yml  # Usa el archivo personalizado en tu repo
+          config: .semgrep.yml
+        id: semgrep
+        
+      # Guardar los resultados de Semgrep en formato JSON
+      - name: Save Semgrep results in JSON
+        run: |
+          semgrep --config .semgrep.yml --output semgrep-results.json --json
+        id: save_results
+
+      # Crear una página de GitHub Pages con los resultados de Semgrep
+      - name: Generate GitHub Pages site for Semgrep results
+        run: |
+          mkdir -p docs
+          cp semgrep-results.json docs/semgrep-results.json
+          cp index.html docs/index.html
+          git add docs/
+          git commit -m "Publish Semgrep results on GitHub Pages"
+          git push origin gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token de autenticación para el push a gh-pages
