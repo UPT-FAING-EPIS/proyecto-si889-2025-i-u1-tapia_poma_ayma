@@ -1,45 +1,35 @@
-name: Snyk Security Scan
+# .github/workflows/snyk-flutter-analysis.yml
+name: Snyk Flutter Analysis
 
 on:
   push:
     branches:
       - main
-      - master
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - main
 
 jobs:
-  snyk-security-scan:
-    name: Snyk Security Scan
-    runs-on: windows-latest
+  snyk:
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup Flutter (3.29.3)
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
-          version: 3.29.3
+          flutter-version: 'stable'
 
-      - name: Install dependencies
-        run: |
-          cd proyecto
-          flutter pub get
+      - name: Install Flutter dependencies
+        working-directory: proyecto
+        run: flutter pub get
 
-      - name: Install Node.js (required for Snyk CLI)
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Install Snyk CLI
-        run: |
-          npm install -g snyk
-
-      - name: Run Snyk Security Scan
+      - name: Run Snyk to check vulnerabilities
+        uses: snyk/actions@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: |
-          snyk test --file=proyecto/pubspec.yaml --all-projects --detection-depth=3
+        with:
+          command: monitor
+          project-directory: proyecto
