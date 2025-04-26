@@ -36,24 +36,18 @@ jobs:
           echo "No test files found, skipping tests..."
         fi || true  # Evita que falle el workflow si no hay tests
 
-    - name: Install SonarQube scanner
-      run: |
-        cd proyecto
-        # Descargar y extraer el sonar-scanner
-        curl -sSLo sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
-        unzip sonarscanner.zip
-        # Agregar sonar-scanner al PATH
-        export PATH=$PWD/sonar-scanner-4.7.0.2747-linux/bin:$PATH
-        echo "SonarScanner installed and added to PATH"
-
-    - name: Run SonarQube analysis
+    - name: Run SonarQube analysis with Docker
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         cd proyecto
-        # Verificar si sonar-scanner está correctamente en el PATH
-        sonar-scanner --version
-        sonar-scanner \
+        docker run \
+          --rm \
+          -e SONAR_HOST_URL=http://localhost:9000 \
+          -e SONAR_LOGIN=$SONAR_TOKEN \
+          -v $(pwd):/usr/src \
+          sonarsource/sonar-scanner-cli \
           -Dsonar.projectKey=erickorganizacion_proyecto \
-          -Dsonar.host.url=http://localhost:9000 \
-          -Dsonar.login=$SONAR_TOKEN
+          -Dsonar.sources=./lib \
+          -Dsonar.tests=./test \
+          -Dsonar.inclusions="**/*.dart"
