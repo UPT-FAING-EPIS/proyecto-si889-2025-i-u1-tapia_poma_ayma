@@ -1,4 +1,5 @@
 rules:
+  # Evitar contraseñas hardcodeadas
   - id: avoid-hardcoded-passwords
     patterns:
       - pattern: password = "$SECRET"
@@ -7,26 +8,104 @@ rules:
     languages: [dart]
     severity: ERROR
 
+  # Evitar comentarios TODO en producción
   - id: avoid-todo-comments
     pattern: // TODO
     message: "Los TODO deben resolverse antes del release."
     languages: [dart]
     severity: WARNING
 
+  # Evitar el uso de print en producción
   - id: avoid-print-debug
     pattern: print($MSG)
     message: "Evita usar 'print' en producción. Usa logs o herramientas de depuración."
     languages: [dart]
     severity: WARNING
 
+  # Manejo adecuado de nulls
   - id: missing-null-check
     pattern: if ($VAR != null) {
     message: "Asegúrate de manejar correctamente los nulls, o usa el operador '?.'."
     languages: [dart]
     severity: INFO
 
+  # Usar const cuando sea posible
   - id: use-const-when-possible
     pattern: Widget($ARGS)
     message: "Considera usar 'const' para mejorar el rendimiento si los valores son constantes."
+    languages: [dart]
+    severity: INFO
+
+  # Evitar variables no utilizadas
+  - id: avoid-unused-variables
+    pattern: var $VAR = $VALUE;
+    message: "Elimina las variables no utilizadas para mantener el código limpio."
+    languages: [dart]
+    severity: WARNING
+
+  # Evitar funciones largas
+  - id: avoid-long-functions
+    pattern: |
+      function $FUNC(...) {
+        $BODY
+      }
+    message: "Considera dividir las funciones largas en funciones más pequeñas para mejorar la legibilidad."
+    languages: [dart]
+    severity: INFO
+    metavariables:
+      $BODY:
+        min_lines: 50
+
+  # Usar final para variables inmutables
+  - id: use-final-for-immutable
+    pattern: var $VAR = $VALUE;
+    message: "Usa 'final' en lugar de 'var' para variables que no cambian después de ser inicializadas."
+    languages: [dart]
+    severity: INFO
+
+  # Evitar imports no utilizados
+  - id: avoid-unused-imports
+    pattern: import $IMPORT;
+    message: "Elimina los imports no utilizados para mantener el código limpio."
+    languages: [dart]
+    severity: WARNING
+
+  # Evitar el uso de funciones obsoletas
+  - id: avoid-deprecated-functions
+    pattern: $FUNC(...)
+    message: "Evita usar funciones obsoletas. Consulta la documentación para alternativas."
+    languages: [dart]
+    severity: WARNING
+    metavariables:
+      $FUNC:
+        regex: "deprecatedFunctionName"
+
+  # Usar keys en widgets con estado
+  - id: use-keys-in-stateful-widgets
+    pattern: |
+      class $CLASS extends StatefulWidget {
+        ...
+      }
+    message: "Asegúrate de usar 'Key' en widgets con estado para mejorar el rendimiento."
+    languages: [dart]
+    severity: INFO
+
+  # Evitar bloques catch vacíos
+  - id: avoid-empty-catch-blocks
+    pattern: |
+      try {
+        ...
+      } catch (e) {
+      }
+    message: "Evita bloques catch vacíos. Maneja las excepciones adecuadamente."
+    languages: [dart]
+    severity: WARNING
+
+  # Evitar código duplicado
+  - id: avoid-duplicate-code
+    pattern: |
+      $CODE
+      $CODE
+    message: "Evita duplicar código. Considera refactorizar en una función reutilizable."
     languages: [dart]
     severity: INFO
