@@ -39,15 +39,20 @@ jobs:
     - name: Install SonarQube scanner
       run: |
         cd proyecto
+        # Descargar y extraer el sonar-scanner
         curl -sSLo sonarscanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
         unzip sonarscanner.zip
+        # Agregar sonar-scanner al PATH
         export PATH=$PWD/sonar-scanner-4.7.0.2747-linux/bin:$PATH
+        echo "SonarScanner installed and added to PATH"
 
     - name: Run SonarQube analysis
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         cd proyecto
+        # Verificar si sonar-scanner está correctamente en el PATH
+        sonar-scanner --version
         sonar-scanner \
           -Dsonar.projectKey=erickorganizacion_proyecto \
           -Dsonar.host.url=http://localhost:9000 \
