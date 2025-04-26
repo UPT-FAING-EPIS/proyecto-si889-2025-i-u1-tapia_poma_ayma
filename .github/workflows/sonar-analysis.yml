@@ -1,4 +1,4 @@
-name: SonarQube Analysis
+name: SonarCloud Analysis
 
 on:
   push:
@@ -36,18 +36,19 @@ jobs:
           echo "No test files found, skipping tests..."
         fi || true  # Evita que falle el workflow si no hay tests
 
-    - name: Run SonarQube analysis with Docker
+    - name: Run SonarCloud analysis
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         cd proyecto
         docker run \
           --rm \
-          -e SONAR_HOST_URL=http://localhost:9000 \
+          -e SONAR_HOST_URL=https://sonarcloud.io \
           -e SONAR_LOGIN=$SONAR_TOKEN \
           -v $(pwd):/usr/src \
           sonarsource/sonar-scanner-cli \
           -Dsonar.projectKey=erickorganizacion_proyecto \
+          -Dsonar.organization=YOUR_ORG_KEY \
           -Dsonar.sources=./lib \
           -Dsonar.tests=./test \
           -Dsonar.inclusions="**/*.dart"
