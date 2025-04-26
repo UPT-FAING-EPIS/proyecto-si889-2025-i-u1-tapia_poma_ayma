@@ -14,12 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Obligatorio para SonarQube
+          fetch-depth: 0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.3'  # Versión específica
+          flutter-version: '3.29.3'
           channel: 'stable'
 
       - name: Install dependencies
@@ -30,6 +30,11 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@master
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Configurar en GitHub Secrets
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: ./proyecto  # Ruta a tu proyecto Flutter
+          projectBaseDir: ./proyecto
+          # Opcional: Forzar análisis si el proyecto ya existe
+          args: >
+            -Dsonar.projectKey=erickorganizacion_proyecto
+            -Dsonar.organization=erickorganizacion
+            -Dsonar.host.url=https://sonarcloud.io
