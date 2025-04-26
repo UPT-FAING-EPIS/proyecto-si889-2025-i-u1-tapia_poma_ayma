@@ -20,34 +20,35 @@ jobs:
           flutter-version: '3.29.3'
 
       - name: Install dependencies
-        working-directory: proyecto
+        working-directory: proyecto-si889-2025-i-u1-tapia_poma_ayma/proyecto
         run: flutter pub get
 
-      # Proper Snyk installation
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Install Snyk CLI
-        run: |
-          npm install -g snyk
-          snyk --version
+        run: npm install -g snyk
 
-      # Secure scan with proper SARIF output
+      - name: Create Snyk directory
+        run: mkdir -p proyecto-si889-2025-i-u1-tapia_poma_ayma/Snyk
+
       - name: Run Snyk scan
-        working-directory: proyecto
+        working-directory: proyecto-si889-2025-i-u1-tapia_poma_ayma/proyecto
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
-          # Create Snyk directory at the root of the repository if it doesn't exist
-          mkdir -p Snyk
-          snyk test --file=pubspec.yaml --package-manager=pub --sarif > Snyk/snyk_report.sarif || true
-          # Validate SARIF format
-          jq empty Snyk/snyk_report.sarif && echo "SARIF is valid" || echo "SARIF validation failed"
+          snyk test --file=pubspec.yaml --package-manager=pub --sarif > ../Snyk/snyk_report.sarif || echo "Scan completed with findings"
 
-      # Updated CodeQL upload action
+      - name: Verify SARIF file
+        run: |
+          echo "Contenido del directorio Snyk:"
+          ls -la proyecto-si889-2025-i-u1-tapia_poma_ayma/Snyk/
+          echo "Validación del archivo SARIF:"
+          jq empty proyecto-si889-2025-i-u1-tapia_poma_ayma/Snyk/snyk_report.sarif && echo "SARIF válido" || echo "Error en SARIF"
+
       - name: Upload SARIF results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: Snyk/snyk_report.sarif
+          sarif_file: proyecto-si889-2025-i-u1-tapia_poma_ayma/Snyk/snyk_report.sarif
