@@ -29,17 +29,21 @@ jobs:
           cd proyecto
           flutter pub get
 
-      - name: Install SonarScanner
+      - name: Install SonarScanner (Linux)
         run: |
           sudo apt-get update
           sudo apt-get install -y openjdk-17-jdk
           wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
           unzip sonar-scanner-cli-5.0.1.3006-linux.zip
-          echo "$(pwd)/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH  # Método correcto para PATH
+          echo "$(pwd)/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
 
-      - name: Run SonarScanner
+      - name: Run SonarScanner (Equivalente a tu comando local)
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Reemplaza con tu token real o usa un secret
         run: |
           cd proyecto
-          sonar-scanner -Dsonar.login=$SONAR_TOKEN
+          sonar-scanner \
+            -Dsonar.login=$SONAR_TOKEN \
+            -Dsonar.projectKey=erickorganizacion_proyecto \
+            -Dsonar.organization=erickorganizacion \
+            -Dsonar.host.url=https://sonarcloud.io
