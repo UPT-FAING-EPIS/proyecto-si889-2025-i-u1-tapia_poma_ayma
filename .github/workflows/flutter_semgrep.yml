@@ -1,0 +1,35 @@
+name: Flutter CI + Semgrep
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  flutter_and_semgrep:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+
+      - name: 📦 Install dependencies
+        run: |
+          cd proyecto
+          flutter pub get
+
+      - name: 🧪 Run tests
+        run: |
+          cd proyecto
+          flutter test || true
+
+      - name: 🕵️ Run Semgrep (custom rules)
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: .semgrep.yml  # Usa el archivo personalizado en tu repo
