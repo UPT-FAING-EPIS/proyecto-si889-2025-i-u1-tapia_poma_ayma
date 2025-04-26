@@ -1,4 +1,4 @@
-name: Semgrep Scan and Publish to gh-pages
+name: Semgrep Scan and Publish Report
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: write  # Permiso para hacer push a otra rama
+  contents: write  # Permite hacer push a otra rama
 
 jobs:
   semgrep:
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Necesario para cambiar de rama después
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -28,25 +28,28 @@ jobs:
       - name: Install Semgrep
         run: pip install semgrep
 
-      - name: Run Semgrep and output JSON
+      - name: Run Semgrep and output JSON and SARIF
         run: |
           cd proyecto
           semgrep --config=auto --json > semgrep_report.json
+          semgrep --config=auto --sarif > semgrep_report.sarif
 
       - name: Switch to gh-pages branch
         run: |
           git fetch origin gh-pages || git checkout --orphan gh-pages
           git checkout gh-pages
 
-      - name: Copy Semgrep Report to semgrep/ folder
+      - name: Copy Semgrep Reports to semgrep/ folder
         run: |
           mkdir -p semgrep
           cp proyecto/semgrep_report.json semgrep/semgrep_report.json
+          cp proyecto/semgrep_report.sarif semgrep/semgrep_report.sarif
 
-      - name: Commit and Push Semgrep report to gh-pages
+      - name: Commit and Push Semgrep reports to gh-pages
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add semgrep/semgrep_report.json
-          git commit -m "Update Semgrep report 🚀" || echo "No changes to commit"
+          git add semgrep/semgrep_report.sarif
+          git commit -m "Update Semgrep reports 🚀" || echo "No changes to commit"
           git push origin gh-pages
