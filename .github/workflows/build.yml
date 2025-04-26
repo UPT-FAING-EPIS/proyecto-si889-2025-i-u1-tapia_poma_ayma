@@ -8,7 +8,7 @@ on:
 
 jobs:
   sonarcloud-scan:
-    runs-on: windows-latest  # Usamos Windows para replicar tu entorno local
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,16 +25,16 @@ jobs:
           cd proyecto
           flutter pub get
 
-      - name: Download SonarScanner (Windows)
+      - name: Install SonarScanner (Windows)
         run: |
-          Invoke-WebRequest -Uri "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip" -OutFile "sonar-scanner.zip"
-          Expand-Archive -Path "sonar-scanner.zip" -DestinationPath "C:\sonar-scanner" -Force
-          echo "C:\sonar-scanner\sonar-scanner-5.0.1.3006-windows\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          # Descarga directa a la misma ruta que usas localmente
+          Invoke-WebRequest -Uri "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip" -OutFile "C:\sonar-scanner.zip"
+          Expand-Archive -Path "C:\sonar-scanner.zip" -DestinationPath "C:\" -Force
 
-      - name: Run SonarScanner (EXACTO como lo haces localmente)
+      - name: Run SonarScanner (IDÉNTICO a tu comando local)
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Configura este secret en GitHub
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Debe coincidir con tu token local
         run: |
           cd proyecto
           $env:SONAR_TOKEN="${{ secrets.SONAR_TOKEN1 }}"
-          C:\sonar-scanner\sonar-scanner-5.0.1.3006-windows\bin\sonar-scanner.bat
+          C:\sonar-scanner\bin\sonar-scanner.bat  # ¡Misma ruta exacta!
