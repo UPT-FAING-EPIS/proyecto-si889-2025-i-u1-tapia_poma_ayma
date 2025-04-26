@@ -41,19 +41,6 @@ rules:
     languages: [dart]
     severity: WARNING
 
-  # Evitar funciones largas
-  - id: avoid-long-functions
-    pattern: |
-      function $FUNC(...) {
-        $BODY
-      }
-    message: "Considera dividir las funciones largas en funciones más pequeñas para mejorar la legibilidad."
-    languages: [dart]
-    severity: INFO
-    metavariables:
-      $BODY:
-        min_lines: 50
-
   # Evitar el uso de funciones obsoletas
   - id: avoid-deprecated-functions
     pattern: $FUNC(...)
