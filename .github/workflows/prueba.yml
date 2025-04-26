@@ -1,0 +1,40 @@
+name: Flutter Dependency Scan (SARIF)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  dependency-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+
+      - name: Install dependencies
+        working-directory: proyecto
+        run: flutter pub get
+
+      # Paso 1: Instalar Snyk y convertir resultados a SARIF
+      - name: Scan with Snyk
+        uses: snyk/actions/setup@v3
+        with:
+          token: ${{ secrets.SNYK_TOKEN }}  # Configurar en Secrets
+      - name: Run Snyk and generate SARIF
+        working-directory: proyecto
+        run: |
+          snyk test --file=pubspec.yaml --package-manager=pub --sarif > snyk.sarif
+
+      # Paso 2: Subir SARIF a GitHub Code Scanning
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: proyecto/snyk.sarif
