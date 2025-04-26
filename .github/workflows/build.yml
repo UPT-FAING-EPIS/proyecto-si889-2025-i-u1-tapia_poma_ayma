@@ -30,22 +30,24 @@ jobs:
           # Descargar el sonar-scanner
           $scannerUrl = "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-windows.zip"
           $downloadPath = "$env:RUNNER_TEMP\sonar-scanner.zip"
-          $installPath = "C:\sonar-scanner"
+          $installPath = "$env:RUNNER_TEMP\sonar-scanner"
           
           Invoke-WebRequest -Uri $scannerUrl -OutFile $downloadPath
           Expand-Archive -Path $downloadPath -DestinationPath $installPath -Force
           
-          # Agregar al PATH
-          $scannerBinPath = "$installPath\sonar-scanner-5.0.1.3006-windows\bin"
-          echo "::add-path::$scannerBinPath"
-          
           # Verificar instalación
-          dir "$installPath\sonar-scanner-5.0.1.3006-windows\bin\sonar-scanner.bat"
-          if (-not $?) { exit 1 }
+          $scannerBatPath = "$installPath\sonar-scanner-5.0.1.3006-windows\bin\sonar-scanner.bat"
+          if (-not (Test-Path $scannerBatPath)) { 
+              Write-Error "SonarScanner no se instaló correctamente"
+              exit 1
+          }
+          
+          # Guardar ruta para el siguiente paso
+          echo "SCANNER_PATH=$scannerBatPath" >> $env:GITHUB_ENV
 
       - name: Run SonarScanner
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN1 }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd proyecto
-          sonar-scanner.bat -Dsonar.login=$env:SONAR_TOKEN
+          & "$env:SCANNER_PATH" -Dsonar.login=$env:SONAR_TOKEN
