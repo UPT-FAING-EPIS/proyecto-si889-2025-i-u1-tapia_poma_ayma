@@ -31,10 +31,22 @@ jobs:
 
       - name: Install Semgrep
         run: |
+          # Instalar dependencias necesarias
+          sudo apt-get update
+          sudo apt-get install -y wget jq
+
+          # Descargar e instalar la última versión de semgrep
+          echo "Descargando la última versión de Semgrep..."
           curl -s https://api.github.com/repos/returntocorp/semgrep/releases/latest | jq -r .assets[0].browser_download_url | xargs wget -q -O semgrep.tar.gz
+
+          # Extraer y mover el binario
+          echo "Extrayendo semgrep..."
           tar -xzf semgrep.tar.gz
           chmod +x semgrep
           sudo mv semgrep /usr/local/bin/
+
+          # Verificar la instalación de semgrep
+          semgrep --version
 
       - name: Run Semgrep (custom rules)
         run: |
