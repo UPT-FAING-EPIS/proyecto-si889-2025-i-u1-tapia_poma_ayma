@@ -1,0 +1,45 @@
+{
+    "results": [
+      {
+        "path": "proyecto/lib/main.dart",
+        "check_id": "detect-gemini",
+        "message": "Possibly found usage of AI: Gemini",
+        "start": {
+          "line": 20,
+          "col": 1
+        },
+        "end": {
+          "line": 20,
+          "col": 25
+        },
+        "severity": "INFO",
+        "metadata": {
+          "category": "maintainability",
+          "technology": ["genAI", "LLMs"],
+          "confidence": "LOW",
+          "references": [
+            "https://semgrep.dev/blog/2024/detecting-shadow-ai"
+          ]
+        }
+      },
+      {
+        "path": "proyecto/lib/another_file.dart",
+        "check_id": "detect-firebase-vertex",
+        "message": "Detected usage of Firebase Vertex AI",
+        "start": {
+          "line": 10,
+          "col": 5
+        },
+        "end": {
+          "line": 10,
+          "col": 30
+        },
+        "severity": "WARNING",
+        "metadata": {
+          "category": "security",
+          "technology": ["Firebase", "AI"]
+        }
+      }
+    ]
+  }
+  
