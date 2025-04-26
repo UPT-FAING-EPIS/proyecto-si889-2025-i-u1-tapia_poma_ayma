@@ -1,0 +1,45 @@
+name: Semgrep Scan and Publish Report
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write  # Esto permite hacer push de los cambios (muy importante)
+
+jobs:
+  semgrep:
+    name: Run Semgrep and Save Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      - name: Run Semgrep and output JSON
+        run: |
+          cd proyecto
+          semgrep --config=auto --json > semgrep_report.json
+
+      - name: Copy Semgrep Report to semgrep/ folder
+        run: |
+          mkdir -p semgrep
+          cp proyecto/semgrep_report.json semgrep/semgrep_report.json
+
+      - name: Commit Semgrep report to repository
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add semgrep/semgrep_report.json
+          git commit -m "Update Semgrep report 🚀" || echo "No changes to commit"
+          git push
