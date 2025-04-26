@@ -1,4 +1,3 @@
-# .github/workflows/snyk-flutter-analysis.yml
 name: Snyk Flutter Analysis
 
 on:
@@ -20,7 +19,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.3'   # ← aquí tu versión exacta
+          flutter-version: '3.29.3'
 
       - name: Install Flutter dependencies
         working-directory: proyecto
@@ -31,5 +30,6 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          command: monitor
+          command: test
           project-directory: proyecto
+          args: --file=pubspec.yaml --package-manager=flutter
