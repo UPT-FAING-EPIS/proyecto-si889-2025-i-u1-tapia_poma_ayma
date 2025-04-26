@@ -50,4 +50,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN1 }}
         run: |
           cd proyecto
-          & "$env:SCANNER_PATH" -Dsonar.login=$env:SONAR_TOKEN
+          & "$env:SCANNER_PATH" "-Dsonar.login=$env:SONAR_TOKEN"
