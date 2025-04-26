@@ -23,7 +23,7 @@
         }
       },
       {
-        "path": "proyecto/lib/another_file.dart",
+        "path": "proyecto/lib/home.dart",
         "check_id": "detect-firebase-vertex",
         "message": "Detected usage of Firebase Vertex AI",
         "start": {
