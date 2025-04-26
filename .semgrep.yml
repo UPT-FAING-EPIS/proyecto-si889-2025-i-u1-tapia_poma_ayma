@@ -52,9 +52,6 @@ rules:
     message: "Considera dividir las funciones largas en funciones más pequeñas para mejorar la legibilidad."
     languages: [dart]
     severity: INFO
-    metavariables:
-      $BODY:
-        min_lines: 50
 
   # Usar final para variables inmutables
   - id: use-final-for-immutable
@@ -76,9 +73,6 @@ rules:
     message: "Evita usar funciones obsoletas. Consulta la documentación para alternativas."
     languages: [dart]
     severity: WARNING
-    metavariables:
-      $FUNC:
-        regex: "deprecatedFunctionName"
 
   # Usar keys en widgets con estado
   - id: use-keys-in-stateful-widgets
