@@ -1,26 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semgrep Results</title>
+  <meta charset="UTF-8">
+  <title>Semgrep Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f8f9fa;
+    }
+    h1 {
+      color: #343a40;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.8rem;
+      border: 1px solid #dee2e6;
+      text-align: left;
+    }
+    th {
+      background-color: #343a40;
+      color: #fff;
+    }
+    tr:nth-child(even) {
+      background-color: #e9ecef;
+    }
+    .error {
+      color: red;
+    }
+  </style>
 </head>
 <body>
-    <h1>Semgrep Results</h1>
-    <div id="results"></div>
 
-    <script>
-        fetch('semgrep-results.json')
-            .then(response => response.json())
-            .then(data => {
-                let htmlContent = '<ul>';
-                data.results.forEach(result => {
-                    htmlContent += `<li><strong>${result.check_id}</strong>: ${result.path} - Line: ${result.start.line}</li>`;
-                });
-                htmlContent += '</ul>';
-                document.getElementById('results').innerHTML = htmlContent;
-            })
-            .catch(error => console.error('Error loading the Semgrep results:', error));
-    </script>
+  <h1>📋 Semgrep Report</h1>
+  <div id="report"></div>
+
+  <script>
+    async function loadReport() {
+      try {
+        const response = await fetch('semgrep_report.json');
+        const data = await response.json();
+
+        if (!data.results || data.results.length === 0) {
+          document.getElementById('report').innerHTML = "<p>No se encontraron problemas. 🎉</p>";
+          return;
+        }
+
+        let html = '<table>';
+        html += '<tr><th>Regla</th><th>Archivo</th><th>Línea</th><th>Descripción</th><th>Severidad</th></tr>';
+
+        data.results.forEach(issue => {
+          html += `<tr>
+            <td>${issue.check_id}</td>
+            <td>${issue.path}</td>
+            <td>${issue.start.line}</td>
+            <td>${issue.extra.message}</td>
+            <td class="${issue.extra.severity === 'ERROR' ? 'error' : ''}">${issue.extra.severity}</td>
+          </tr>`;
+        });
+
+        html += '</table>';
+        document.getElementById('report').innerHTML = html;
+      } catch (error) {
+        document.getElementById('report').innerHTML = `<p>Error al cargar el reporte. 😢</p>`;
+        console.error(error);
+      }
+    }
+
+    loadReport();
+  </script>
+
 </body>
 </html>
