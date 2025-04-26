@@ -14,13 +14,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Debug directory structure
+        run: ls -R
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.3'
 
       - name: Install dependencies
-        working-directory: proyecto-si889-2025-i-u1-tapia_poma_ayma/proyecto
+        working-directory: proyecto  # Solo la carpeta proyecto
         run: flutter pub get
 
       - name: Install Node.js
@@ -31,24 +34,21 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Create Snyk directory
-        run: mkdir -p proyecto-si889-2025-i-u1-tapia_poma_ayma/Snyk
-
       - name: Run Snyk scan
-        working-directory: proyecto-si889-2025-i-u1-tapia_poma_ayma/proyecto
+        working-directory: proyecto  # Mismo directorio que pubspec.yaml
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
+          mkdir -p ../Snyk
           snyk test --file=pubspec.yaml --package-manager=pub --sarif > ../Snyk/snyk_report.sarif || echo "Scan completed with findings"
 
       - name: Verify SARIF file
         run: |
           echo "Contenido del directorio Snyk:"
-          ls -la proyecto-si889-2025-i-u1-tapia_poma_ayma/Snyk/
-          echo "Validación del archivo SARIF:"
-          jq empty proyecto-si889-2025-i-u1-tapia_poma_ayma/Snyk/snyk_report.sarif && echo "SARIF válido" || echo "Error en SARIF"
+          ls -la Snyk/
+          [ -s Snyk/snyk_report.sarif ] && echo "SARIF generado correctamente" || echo "Error: SARIF vacío"
 
       - name: Upload SARIF results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: proyecto-si889-2025-i-u1-tapia_poma_ayma/Snyk/snyk_report.sarif
+          sarif_file: Snyk/snyk_report.sarif
