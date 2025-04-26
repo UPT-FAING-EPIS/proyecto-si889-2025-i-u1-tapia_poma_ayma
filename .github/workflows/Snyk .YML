@@ -1,0 +1,41 @@
+name: Snyk Security Scan
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  snyk-security-scan:
+    name: Snyk Security Scan
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Flutter (3.29.3)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          version: 3.29.3
+
+      - name: Install dependencies
+        run: |
+          cd proyecto
+          flutter pub get
+
+      - name: Install Snyk CLI
+        run: |
+          npm install -g snyk
+
+      - name: Run Snyk Security Scan
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          snyk auth $SNYK_TOKEN
+          snyk test --all-projects
