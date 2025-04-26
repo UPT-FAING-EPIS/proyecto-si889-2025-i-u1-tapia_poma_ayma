@@ -9,12 +9,12 @@ on:
       - main
 
 jobs:
-  sonarcloud_analysis:
+  sonar_analysis:
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
@@ -23,31 +23,34 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd proyecto
+        cd proyecto  # Cambiar al directorio correcto
         flutter pub get
 
-    - name: Run tests (if available)
+    - name: Skip tests if none exist
       run: |
-        cd proyecto
         if [ -d "test" ] && [ "$(find test -name '*_test.dart' | wc -l)" -gt 0 ]; then
           flutter test
         else
           echo "No test files found, skipping tests..."
         fi
 
-    - name: Run SonarCloud analysis
+    - name: Install SonarQube scanner
+      run: |
+        cd proyecto  # Cambiar al directorio correcto
+        curl -sSLo sonarscanner.zip https://binaries.sonarsource.com/DownloadScanner/sonar-scanner-cli-4.7.0.2747-linux.zip
+        unzip sonarscanner.zip
+        export PATH=$PWD/sonar-scanner-4.7.0.2747-linux/bin:$PATH
+
+    - name: Run SonarQube analysis
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        cd proyecto
+        cd proyecto  # Cambiar al directorio correcto
         sonar-scanner \
           -Dsonar.projectKey=erickorganizacion_proyecto \
-          -Dsonar.organization=erickorganizacion \
-          -Dsonar.projectName="Flutter App" \
-          -Dsonar.projectVersion=1.0 \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=$SONAR_TOKEN \
           -Dsonar.sources=lib \
           -Dsonar.tests=test \
-          -Dsonar.exclusions="**/*.g.dart,**/*.freezed.dart,**/*.mocks.dart" \
           -Dsonar.inclusions="**/*.dart" \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=$SONAR_TOKEN
+          -Dsonar.projectBaseDir=$PWD
