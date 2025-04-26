@@ -1,0 +1,36 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  analyze:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.19.6"  # Usa la versión de Flutter que necesites
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Change directory to the project folder
+        run: cd proyecto  # Cambia 'proyecto' por el nombre de tu carpeta del proyecto si es necesario
+
+      - name: Run SonarCloud analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          flutter pub global activate sonar_flutter
+          flutter pub global run sonar_flutter
