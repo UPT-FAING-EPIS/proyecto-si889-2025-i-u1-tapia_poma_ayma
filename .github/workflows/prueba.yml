@@ -23,23 +23,29 @@ jobs:
         working-directory: proyecto
         run: flutter pub get
 
-      # Instalación correcta de Snyk CLI (método alternativo)
+      # Proper Snyk installation
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
       - name: Install Snyk CLI
         run: |
           npm install -g snyk
           snyk --version
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      # Escaneo y generación de SARIF
+      # Secure scan with proper SARIF output
       - name: Run Snyk scan
         working-directory: proyecto
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
-          snyk test --file=pubspec.yaml --package-manager=pub --sarif --json > snyk_report.sarif || echo "Snyk scan completed with findings"
-          
-      # Subir resultados (si el archivo existe)
+          snyk test --file=pubspec.yaml --package-manager=pub --sarif > snyk_report.sarif || true
+          # Validate SARIF format
+          jq empty snyk_report.sarif && echo "SARIF is valid" || echo "SARIF validation failed"
+
+      # Updated CodeQL upload action
       - name: Upload SARIF results
-        uses: github/codeql-action/upload-sarif@v2
-        if: success() || failure()  # Se ejecuta siempre que exista el archivo
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: proyecto/snyk_report.sarif
