@@ -36,13 +36,18 @@ jobs:
         uses: returntocorp/semgrep-action@v1
         with:
           config: .semgrep.yml  # Usa el archivo personalizado en tu repo
+          output: semgrep-results.json  # Especificar la salida explícita del archivo
+
+      - name: List files to check for semgrep-results.json
+        run: |
+          ls -alh  # Verifica si el archivo semgrep-results.json está presente
 
       - name: Deploy results to GitHub Pages
         run: |
           # Copia los resultados generados a la rama gh-pages
           git clone --branch gh-pages https://github.com/${{ github.repository }} gh-pages
-          cp semgrep-results.json gh-pages/semgrep-results.json
-          cp index.html gh-pages/index.html
+          cp semgrep-results.json gh-pages/semgrep-results.json || echo "No semgrep-results.json found"
+          cp index.html gh-pages/index.html || echo "No index.html found"
           cd gh-pages
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
