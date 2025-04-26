@@ -42,7 +42,8 @@
   <script>
     async function loadReport() {
       try {
-        const response = await fetch('semgrep_report.json');
+        // CORREGIDO: buscar en la subcarpeta "semgrep/"
+        const response = await fetch('semgrep/semgrep_report.json');
         const data = await response.json();
 
         if (!data.results || data.results.length === 0) {
