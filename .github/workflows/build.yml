@@ -10,13 +10,13 @@ on:
 
 jobs:
   sonarqube:
-    name: SonarQube
+    name: SonarQube Analysis
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Mejora la relevancia del análisis
+          fetch-depth: 0  # Necesario para análisis preciso
 
       - name: Setup Flutter (3.29.3)
         uses: subosito/flutter-action@v2
@@ -26,12 +26,22 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd proyecto  # Cambiar al directorio del proyecto
+          cd proyecto
           flutter pub get
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
+      - name: Install SonarScanner
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-17-jdk
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner-cli-5.0.1.3006-linux.zip
+          sudo mv sonar-scanner-5.0.1.3006-linux /opt/sonar-scanner
+          echo 'export PATH="$PATH:/opt/sonar-scanner/bin"' >> ~/.bashrc
+          source ~/.bashrc
+
+      - name: Run SonarScanner (Local Analysis + Upload to SonarCloud)
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: ./proyecto  # Especifica el directorio base correcto
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Asegúrate de tener este secret en GitHub
+        run: |
+          cd proyecto
+          sonar-scanner -Dsonar.login=$SONAR_TOKEN
