@@ -31,5 +31,4 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: test
-          project-directory: proyecto
-          args: --file=pubspec.yaml --package-manager=flutter
+          args: --file=proyecto/pubspec.yaml
