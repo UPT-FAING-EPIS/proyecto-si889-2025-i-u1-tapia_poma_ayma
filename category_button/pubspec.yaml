@@ -1,0 +1,20 @@
+name: category_button
+description: "Un paquete Flutter que proporciona un botón de categoría estilizado."
+version: 0.0.1
+homepage: https://github.com/DylanTapiaVargas999/category_button
+
+environment:
+  sdk: ">=3.7.0 <4.0.0"
+  flutter: ">=3.7.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0  # (la última versión compatible, cuidado si pones ^5.0.0 que puede no existir aún)
+
+flutter:
+  # No assets aún, así que lo dejamos vacío por ahora
