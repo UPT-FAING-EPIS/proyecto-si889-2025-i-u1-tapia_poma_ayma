@@ -1,4 +1,4 @@
-name: SonarCloud Analysis
+name: Flutter CI with SonarQube
 
 on:
   push:
@@ -9,28 +9,37 @@ on:
       - main
 
 jobs:
-  analyze:
-    name: SonarCloud
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    # Checkout code
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "3.29.3"  # Actualiza a una versión compatible con Dart SDK ^3.7.0
+    # Set up Flutter
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.29.3'
 
-      - name: Install dependencies
-        run: |
-          cd proyecto  # Cambiar al directorio donde está el proyecto
-          flutter pub get
+    # Install dependencies
+    - name: Install dependencies
+      run: flutter pub get
 
-      - name: Run SonarCloud analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          cd proyecto  # Asegúrate de estar en la carpeta correcta
-          flutter pub global activate sonar_flutter
-          flutter pub global run sonar_flutter
+    # Run tests
+    - name: Run tests
+      run: flutter test
+
+    # Run SonarQube analysis
+    - name: SonarQube analysis
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Agrega tu token de SonarQube
+      run: |
+        curl -sSLo sonarscanner.zip https://binaries.sonarsource.com/DownloadScanner/sonar-scanner-cli-4.7.0.2747-linux.zip
+        unzip sonarscanner.zip
+        export PATH=$PWD/sonar-scanner-4.7.0.2747-linux/bin:$PATH
+        sonar-scanner \
+          -Dsonar.projectKey=your_project_key \
+          -Dsonar.host.url=http://your-sonarqube-server.com \
+          -Dsonar.login=$SONAR_TOKEN
