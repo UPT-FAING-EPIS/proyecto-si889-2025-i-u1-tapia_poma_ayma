@@ -6,7 +6,7 @@ on:
       - main  # Cambiado a 'main' en lugar de 'master'
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [ main ]  # Cambiado a 'main' también
+    branches: [main]  # Cambiado a 'main' también
 
 jobs:
   flutter_build:
@@ -19,15 +19,17 @@ jobs:
         with:
           fetch-depth: 0  # Desactiva el clon superficial para un análisis más preciso
 
-      # Instala Flutter
+      # Instala Flutter (actualiza la versión a 3.29.3)
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.0.0'  # Especifica la versión de Flutter que usas
+          flutter-version: '3.29.3'  # Actualizado a la versión correcta de Flutter
 
       # Instala las dependencias de Flutter
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          cd proyecto  # Cambia al directorio donde se encuentra pubspec.yaml
+          flutter pub get
 
       # Realiza el análisis de SonarQube desde la carpeta 'proyecto'
       - name: SonarQube Scan
