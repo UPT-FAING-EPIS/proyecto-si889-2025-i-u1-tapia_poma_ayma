@@ -3,10 +3,10 @@ name: Build
 on:
   push:
     branches:
-      - main  # Cambiado a 'main' en lugar de 'master'
+      - main
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [main]  # Cambiado a 'main' también
+    branches: [main]
 
 jobs:
   flutter_build:
@@ -19,22 +19,23 @@ jobs:
         with:
           fetch-depth: 0  # Desactiva el clon superficial para un análisis más preciso
 
-      # Instala Flutter (actualiza la versión a 3.29.3)
+      # Instala Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.3'  # Actualizado a la versión correcta de Flutter
+          flutter-version: '3.29.3'
 
       # Instala las dependencias de Flutter
       - name: Install dependencies
         run: |
-          cd proyecto  # Cambia al directorio donde se encuentra pubspec.yaml
+          cd proyecto
           flutter pub get
 
       # Realiza el análisis de SonarQube desde la carpeta 'proyecto'
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         with:
-          working-directory: proyecto  # Cambia al directorio donde está el archivo sonar-project.properties
+          # Especifica el directorio de trabajo
+          projectBaseDir: ./proyecto
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
