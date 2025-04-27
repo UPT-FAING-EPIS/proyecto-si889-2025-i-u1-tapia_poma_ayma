@@ -1,4 +1,4 @@
-name: Flutter Dependency Security Scan
+name: Snyk 
 
 on:
   push:
