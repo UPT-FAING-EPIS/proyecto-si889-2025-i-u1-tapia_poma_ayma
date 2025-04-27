@@ -3,9 +3,10 @@ name: Build
 on:
   push:
     branches:
-      - master
+      - main  # Cambiado a 'main' en lugar de 'master'
   pull_request:
     types: [opened, synchronize, reopened]
+    branches: [ main ]  # Cambiado a 'main' también
 
 jobs:
   flutter_build:
@@ -13,9 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Paso para obtener el código del repositorio
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Desactiva el clon superficial para una mayor relevancia en el análisis
+          fetch-depth: 0  # Desactiva el clon superficial para un análisis más preciso
 
       # Instala Flutter
       - name: Set up Flutter
