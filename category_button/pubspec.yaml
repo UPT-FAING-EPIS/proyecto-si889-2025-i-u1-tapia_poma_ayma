@@ -1,7 +1,7 @@
 name: category_button
 description: "Un paquete Flutter que proporciona un botón de categoría estilizado."
 version: 0.0.1
-homepage: https://github.com/DylanTapiaVargas999/category_button
+homepage: https://github.com/UPT-FAING-EPIS/proyecto-si889-2025-i-u1-tapia_poma_ayma
 
 environment:
   sdk: ">=3.7.0 <4.0.0"
