@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write  # Permite hacer push a otra rama
+  security-events: write  # Permite enviar resultados de análisis de seguridad
 
 jobs:
   semgrep:
@@ -53,3 +54,9 @@ jobs:
           git add semgrep/semgrep_report.sarif
           git commit -m "Update Semgrep reports 🚀" || echo "No changes to commit"
           git push origin gh-pages
+
+      # Enviar informe SARIF a GitHub Code Scanning
+      - name: Upload Semgrep SARIF Report to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: proyecto/semgrep_report.sarif
