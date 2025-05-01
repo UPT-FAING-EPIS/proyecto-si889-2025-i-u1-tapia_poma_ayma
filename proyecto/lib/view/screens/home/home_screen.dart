@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:idea1/view/balance_summary_screen_categoris.dart';
-import 'package:idea1/view/invoice_scanner_screen.dart';
-import 'package:idea1/view/text_invoice_screen.dart';
-import 'package:idea1/view/user_balance_screen.dart';
+import 'package:idea1/view/screens/home/balance_summary_screen_categoris.dart';
+import 'package:idea1/view/screens/home/invoice_scanner_screen.dart';
+import 'package:idea1/view/screens/home/text_invoice_screen.dart';
+import 'package:idea1/view/screens/home/user_balance_screen.dart';
 import '../../screens/home/profile_screen.dart';
-import 'package:idea1/view/balance_summary_screen.dart';
+import 'package:idea1/view/screens/home/balance_summary_screen.dart';
 
 // import 'json_viewer_screen.dart';
 // import 'category_summary_screen.dart';

@@ -25,9 +25,7 @@ class InvoiceViewModel {
 
   // Inicializa el mapa con todas las categorías en 0
   void _initializeCategoryTotals() {
-    categoryTotals = {
-      for (var category in categories) category: 0.0,
-    };
+    categoryTotals = {for (var category in categories) category: 0.0};
   }
 
   // Carga y procesa los datos del archivo JSON

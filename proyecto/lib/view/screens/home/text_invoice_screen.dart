@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../viewmodels/invoice_viewmodel.dart';
+import '../../../viewmodels/invoice_viewmodel.dart';
 
 class TextInvoiceScreen extends StatelessWidget {
   const TextInvoiceScreen({super.key});
@@ -69,47 +69,57 @@ class TextInvoiceScreen extends StatelessWidget {
             // Botón
             SizedBox(
               width: double.infinity,
-              child: invoiceViewModel.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ElevatedButton.icon(
-                      onPressed: () async {
-                        final inputText = _controller.text.trim();
+              child:
+                  invoiceViewModel.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : ElevatedButton.icon(
+                        onPressed: () async {
+                          final inputText = _controller.text.trim();
 
-                        if (inputText.isEmpty) {
+                          if (inputText.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'El campo de factura no puede estar vacío.',
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          // Llamar al método para procesar la factura
+                          await invoiceViewModel.processTextInvoice(inputText);
+
+                          final message =
+                              invoiceViewModel.lastError ??
+                              'Factura procesada correctamente.';
+                          final color =
+                              invoiceViewModel.lastError != null
+                                  ? Colors.red
+                                  : Colors.green;
+
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('El campo de factura no puede estar vacío.'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: Text(message),
+                              backgroundColor: color,
                             ),
                           );
-                          return;
-                        }
-
-                        // Llamar al método para procesar la factura
-                        await invoiceViewModel.processTextInvoice(inputText);
-
-                        final message = invoiceViewModel.lastError ??
-                            'Factura procesada correctamente.';
-                        final color = invoiceViewModel.lastError != null ? Colors.red : Colors.green;
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(message), backgroundColor: color),
-                        );
-                      },
-                      icon: const Icon(Icons.upload_rounded),
-                      label: const Text('Procesar Factura'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        textStyle: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                        },
+                        icon: const Icon(Icons.upload_rounded),
+                        label: const Text('Procesar Factura'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                       ),
-                    ),
             ),
           ],
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // Agrega el paquete provider
 import 'package:flutter_markdown/flutter_markdown.dart';
-import '../viewmodels/invoice_viewmodel.dart';
+import '../../../viewmodels/invoice_viewmodel.dart';
 
 class InvoiceScannerScreen extends StatelessWidget {
   final String apiKey;
@@ -11,11 +11,10 @@ class InvoiceScannerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<InvoiceViewModel>(
-      create: (context) => InvoiceViewModel(apiKey: apiKey, userId: 'Pedro Perez'),
+      create:
+          (context) => InvoiceViewModel(apiKey: apiKey, userId: 'Pedro Perez'),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Escanear Factura'),
-        ),
+        appBar: AppBar(title: const Text('Escanear Factura')),
         body: const InvoiceScannerBody(),
       ),
     );
@@ -41,7 +40,11 @@ class InvoiceScannerBody extends StatelessWidget {
               padding: const EdgeInsets.only(top: 32.0, bottom: 16.0),
               child: Row(
                 children: [
-                  const Icon(Icons.document_scanner, color: Colors.green, size: 28),
+                  const Icon(
+                    Icons.document_scanner,
+                    color: Colors.green,
+                    size: 28,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     'Escanear Factura',
@@ -147,10 +150,7 @@ class InvoiceScannerBody extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 6.0),
                 child: Text(
                   'Resultados del análisis:',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
 
@@ -161,7 +161,10 @@ class InvoiceScannerBody extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Card(
                     elevation: 3,
-                    margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 6,
+                      horizontal: 2,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import '../viewmodels/json_table.dart';
-import '../viewmodels/user_balance_viewmodel.dart';
-import '../viewmodels/category_filter_viewmodel.dart';
-import 'filtered_purchases_screen.dart';
-import '../widgets/category_button.dart';
-
-
+import '../../../viewmodels/json_table.dart';
+import '../../../viewmodels/user_balance_viewmodel.dart';
+import '../../../viewmodels/category_filter_viewmodel.dart';
+import '../../filtered_purchases_screen.dart';
+import '../../../widgets/category_button.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
@@ -22,7 +20,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   List<Map<String, dynamic>> allPurchases = [];
 
   final List<String> categories = [
-    'Alimentos', 'Transporte', 'Entretenimiento', 'Salud', 'Educación', 'Hogar', 'Otros',
+    'Alimentos',
+    'Transporte',
+    'Entretenimiento',
+    'Salud',
+    'Educación',
+    'Hogar',
+    'Otros',
   ];
 
   @override
@@ -62,10 +66,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => FilteredPurchasesScreen(
-          category: category,
-          filteredPurchases: filteredPurchases,
-        ),
+        builder:
+            (context) => FilteredPurchasesScreen(
+              category: category,
+              filteredPurchases: filteredPurchases,
+            ),
       ),
     );
   }
@@ -155,7 +160,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: TextStyle(fontSize: 14, color: Colors.grey[700])),
+                Text(
+                  label,
+                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                ),
                 const SizedBox(height: 4),
                 Text(
                   value,
@@ -176,31 +184,39 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : errorMessage != null
+      body:
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : errorMessage != null
               ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(errorMessage!, style: const TextStyle(color: Colors.red, fontSize: 16), textAlign: TextAlign.center),
-                      const SizedBox(height: 16),
-                      ElevatedButton(onPressed: _loadData, child: const Text('Reintentar')),
-                    ],
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildHeader(),
-                      _buildInfoCards(),
-                      const SizedBox(height: 24),
-                      _buildCategoryGrid(),
-                    ],
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      errorMessage!,
+                      style: const TextStyle(color: Colors.red, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _loadData,
+                      child: const Text('Reintentar'),
+                    ),
+                  ],
                 ),
+              )
+              : Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(),
+                    _buildInfoCards(),
+                    const SizedBox(height: 24),
+                    _buildCategoryGrid(),
+                  ],
+                ),
+              ),
     );
   }
 }
