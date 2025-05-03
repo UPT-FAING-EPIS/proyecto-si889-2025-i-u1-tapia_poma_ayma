@@ -19,7 +19,13 @@ En la actualidad, muchas personas tienen dificultades para llevar un control ade
 > - Pérdida de control sobre las finanzas personales.  
 > - Falta de motivación para seguir un presupuesto debido a la falta de visibilidad o personalización en las aplicaciones existentes.
 
+---
 
+## 🎯 Objetivo Principal
+
+**Desarrollar una aplicación intuitiva para gestionar los gastos personales, permitiendo a los usuarios registrar, analizar y visualizar sus finanzas de manera clara y eficiente, con el objetivo de fomentar hábitos de ahorro y planificación financiera.**
+
+---
 ## 👥 Integrantes
 
 | Nombre | Código |
