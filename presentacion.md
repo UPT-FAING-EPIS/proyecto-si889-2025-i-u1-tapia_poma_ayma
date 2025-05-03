@@ -2,10 +2,11 @@
 ## <a name="_4mhyka30lxxp"></a>**App para finanzas personales**
 -----
 ## <a name="_tk90k63j3g2y"></a>**📌 Planteamiento del Problema**
-- Muchas personas enfrentan dificultades para registrar y gestionar sus gastos diarios, lo que afecta su control financiero.
-- La falta de herramientas automatizadas y accesibles dificulta la visibilidad de los hábitos de consumo y la planificación del presupuesto.
-- La ausencia de un sistema estructurado para registrar ingresos y egresos lleva a una administración financiera ineficaz.
-- Es necesario desarrollar una solución tecnológica que automatice el registro de gastos, facilitando el control financiero y mejorando las decisiones económicas.
+En la actualidad, muchas personas tienen dificultades para llevar un control adecuado de sus gastos personales, lo que les impide optimizar sus recursos financieros. A pesar de la disponibilidad de herramientas en línea, muchas de estas no se adaptan a las necesidades específicas de cada usuario, presentando interfaces complejas o limitadas en funcionalidades.  
+
+> 📌 **Consecuencias:**
+> - Pérdida de control sobre las finanzas personales.  
+> - Falta de motivación para seguir un presupuesto debido a la falta de visibilidad o personalización en las aplicaciones existentes.
 
 -----
 
@@ -13,6 +14,24 @@
 **Alcance:** El sistema tiene como objetivo automatizar el registro de ingresos y egresos, permitiendo a los usuarios gestionar sus finanzas personales de manera eficiente. La solución abarcará la creación de un interfaz accesible y fácil de usar para registrar y categorizar transacciones de manera rápida, así como generar reportes automáticos de los hábitos de consumo. Además, incluirá la integración de funciones para establecer presupuestos, alertas de gastos y recomendaciones de ahorro. La implementación también incluirá medidas de seguridad para garantizar la privacidad de los datos financieros.
 
 **Justificación:** El desarrollo de esta solución es esencial debido a la creciente necesidad de herramientas automatizadas para el manejo eficiente de las finanzas personales. Actualmente, muchas personas enfrentan dificultades para llevar un control adecuado de sus gastos, lo que afecta negativamente su capacidad de planificación financiera y toma de decisiones económicas. Una herramienta como esta no solo mejorará la gestión financiera, sino que también promoverá hábitos de consumo más responsables y permitirá a los usuarios identificar oportunidades de ahorro. La automatización del registro de gastos reducirá el tiempo invertido en tareas manuales, haciendo que la adopción de hábitos financieros saludables sea más accesible y atractiva para los usuarios.
+
+
+---
+
+## 🎯 Objetivo Principal
+
+**Desarrollar una aplicación intuitiva para gestionar los gastos personales, permitiendo a los usuarios registrar, analizar y visualizar sus finanzas de manera clara y eficiente, con el objetivo de fomentar hábitos de ahorro y planificación financiera.**
+
+---
+## ✅ Objetivos Secundarios
+
+- **Registrar** los gastos diarios, organizados por categorías (comida, transporte, entretenimiento, etc.).
+- **Analizar** los gastos mediante gráficos y estadísticas para identificar patrones de consumo y posibles áreas de ahorro.
+- **Establecer** presupuestos mensuales para cada categoría de gasto, con alertas si se superan los límites establecidos.
+- **Desarrollar** una interfaz amigable y accesible, con visualizaciones claras y fáciles de entender.
+
+---
+
 # <a name="_i0wqbiu6l0j2"></a>**Diagramas del Sistema:**
 # <a name="_s83s55gc77me"></a>**Diagrama de Casos**
 ![](/media/Aspose.Words.77629125-25fe-40f2-8e6b-ac9183c15a52.001.png)<a name="_uwfvc1weid5f"></a>
