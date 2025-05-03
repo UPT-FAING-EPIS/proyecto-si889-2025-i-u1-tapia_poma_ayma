@@ -28,10 +28,6 @@ Desarrollar una aplicación intuitiva para gestionar los gastos personales, perm
 ### Diagrama de Base de datos 
 ![](media/Aspose.Words.5c575b22-2670-40ec-96a3-f831544e8eb6.004.png)
 
-### Diagrama de Arquitectura del Proyecto 
 
-![](media/Aspose.Words.5c575b22-2670-40ec-96a3-f831544e8eb6.005.jpeg)
-
-![](media/Aspose.Words.5c575b22-2670-40ec-96a3-f831544e8eb6.006.jpeg)
 
 [ref1]: media/Aspose.Words.5c575b22-2670-40ec-96a3-f831544e8eb6.001.png
