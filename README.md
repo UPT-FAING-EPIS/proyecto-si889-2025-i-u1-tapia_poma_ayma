@@ -1,3 +1,49 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/IlvMPK2Y)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=18793430)
-# proyecto-formatos-01
+[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=18703140)
+
+# 📱 **App de Gestión Financiera para el Registro y Análisis de Gastos Personales**  
+
+> Proyecto para el curso de **Patrones de Software** - Universidad Privada de Tacna
+
+---
+
+## 🎓 Título del Proyecto  
+*App de Gestión Financiera para el Registro y Análisis de Gastos Personales*
+
+---
+
+## ❗ Problemática
+
+En la actualidad, muchas personas tienen dificultades para llevar un control adecuado de sus gastos personales, lo que les impide optimizar sus recursos financieros. A pesar de la disponibilidad de herramientas en línea, muchas de estas no se adaptan a las necesidades específicas de cada usuario, presentando interfaces complejas o limitadas en funcionalidades.  
+
+> 📌 **Consecuencias:**
+> - Pérdida de control sobre las finanzas personales.  
+> - Falta de motivación para seguir un presupuesto debido a la falta de visibilidad o personalización en las aplicaciones existentes.
+
+
+## 👥 Integrantes
+
+| Nombre | Código |
+| :--- | :--- |
+| Erick Yoel Ayma Choque | 2021072616 |
+| Fabiola Estefani Poma Machicado | 2021070030 |
+| Dylan Yariet Tapia Vargas | 2021072630 |
+
+---
+
+## 📋 Control de Versiones
+
+| Versión | Hecha por | Revisada por | Aprobada por | Fecha | Motivo |
+| :---: | :---: | :---: | :---: | :---: | :--- |
+| 1.0 | MPV | ELV | ARV | 03/05/2025 | Versión Original |
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+- **Flutter**
+- **Chart.js** 📊
+- **Firebase** 🔐 (para autenticación de usuarios)
+
+---
+
+> **Tacna - Perú, 2025** 🌎
