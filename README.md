@@ -26,6 +26,14 @@ En la actualidad, muchas personas tienen dificultades para llevar un control ade
 **Desarrollar una aplicación intuitiva para gestionar los gastos personales, permitiendo a los usuarios registrar, analizar y visualizar sus finanzas de manera clara y eficiente, con el objetivo de fomentar hábitos de ahorro y planificación financiera.**
 
 ---
+## ✅ Objetivos Secundarios
+
+- **Registrar** los gastos diarios, organizados por categorías (comida, transporte, entretenimiento, etc.).
+- **Analizar** los gastos mediante gráficos y estadísticas para identificar patrones de consumo y posibles áreas de ahorro.
+- **Establecer** presupuestos mensuales para cada categoría de gasto, con alertas si se superan los límites establecidos.
+- **Desarrollar** una interfaz amigable y accesible, con visualizaciones claras y fáciles de entender.
+
+---
 ## 👥 Integrantes
 
 | Nombre | Código |
