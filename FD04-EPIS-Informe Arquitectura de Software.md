@@ -1,4 +1,4 @@
-﻿![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.001.png)
+﻿![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.001.png)
 
 **UNIVERSIDAD PRIVADA DE TACNA** 
 
@@ -69,7 +69,7 @@ Logo de Mi Empresa  Logo de mi Cliente
 
 1. Propósito<a name="_page3_x85.05_y115.31"></a> (Diagrama 4+1) 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.002.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.002.jpeg)
 
 2. Alcance<a name="_page3_x85.05_y470.50"></a> 
 
@@ -169,7 +169,7 @@ No se incluirán servicios físicos (atención en sucursales o cajeros automáti
 3. **REPRESENTACIÓN<a name="_page8_x85.05_y172.29"></a> DE LA ARQUITECTURA DEL SISTEMA** 
 3. Diagramas<a name="_page8_x85.05_y216.86"></a> de Casos de uso 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.003.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.003.jpeg)
 
 1. Vista<a name="_page9_x85.05_y70.85"></a> Lógica 
 
@@ -183,84 +183,84 @@ No se incluirán servicios físicos (atención en sucursales o cajeros automáti
 
 2. Diagrama<a name="_page9_x85.05_y250.08"></a> de Secuencia (vista de diseño) Diagrama de Secuencia General 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.004.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.004.jpeg)
 
 1. **Diagrama de Secuencia: Registrar usuario** 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.005.png)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.005.png)
 
 2. **Diagrama de Secuencia: Iniciar sesión** 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.006.png)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.006.png)
 
 3. **Diagrama de Secuencia: Recuperar contraseña** 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.007.png)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.007.png)
 
 4. **Diagrama de Secuencia: Registrar ingresos** 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.008.png)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.008.png)
 
 5. **Diagrama de Secuencia: Registrar egresos** 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.009.png)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.009.png)
 
 6. **Diagrama de Secuencia: Registrar con cámara** 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.010.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.010.jpeg)
 
 7. **Diagrama de Secuencia: Editar transacciones** 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.011.png)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.011.png)
 
 8. **Diagrama de Secuencia: Visualizar histórico financiero** 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.012.png)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.012.png)
 
 9. **Diagrama de Secuencia: Generar gráficos de ingresos/gastos** 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.013.png)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.013.png)
 
 10. **Diagrama de Secuencia: Ver balance general** 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.014.png)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.014.png)
 
 3. Diagrama<a name="_page14_x85.05_y630.48"></a> de Colaboración (vista de diseño) 
 3. Diagrama<a name="_page14_x85.05_y668.78"></a> de Objetos 
 5. Diagrama<a name="_page15_x85.05_y70.85"></a> de Clases 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.015.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.015.jpeg)
 
 6. Diagrama<a name="_page15_x85.05_y304.72"></a> de Base de datos (relacional o no relacional) 
 
-   ![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.016.png)
+   ![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.016.png)
 
 2. Vista<a name="_page15_x85.05_y593.43"></a> de Implementación (vista de desarrollo)
 1. Diagrama<a name="_page15_x85.05_y616.56"></a> de arquitectura software (paquetes) 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.017.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.017.jpeg)
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.018.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.018.jpeg)
 
 2. Diagrama<a name="_page18_x85.05_y70.85"></a> de arquitectura del sistema  
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.019.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.019.jpeg)
 
 3. Vista<a name="_page18_x85.05_y423.57"></a> de procesos
 
    <a name="_page19_x85.05_y70.85"></a>3.3.1.  Diagrama de Procesos del sistema (diagrama de actividad) 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.020.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.020.jpeg)
 
 4. Vista<a name="_page19_x85.05_y671.22"></a> de Despliegue (vista física) 
 
    <a name="_page19_x85.05_y694.34"></a>3.4.1.  Diagrama de despliegue 
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.021.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.021.jpeg)
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.022.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.022.jpeg)
 
-![](Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.023.jpeg)
+![](media/Aspose.Words.9732627f-75e5-4eb0-91f9-7d09900d5fd1.023.jpeg)
 
 <a name="_page20_x85.05_y476.24"></a>**4. ATRIBUTOS DE CALIDAD DEL SOFTWARE** 
 
