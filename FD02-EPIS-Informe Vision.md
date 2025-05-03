@@ -1,4 +1,4 @@
-﻿![](Aspose.Words.c5033568-7b90-4a20-9b5c-280040eed77e.001.png)
+﻿![](media/Aspose.Words.c5033568-7b90-4a20-9b5c-280040eed77e.001.png)
 
 **UNIVERSIDAD PRIVADA DE TACNA** 
 
@@ -323,5 +323,5 @@ Ramírez, P. (2020). Desarrollo de un aplicativo móvil para la gestión financi
 
 The Insight Partners. (s.f.). Panorama y alcance del mercado de aplicaciones de finanzas personales. Recuperado de The Insight Partners 
 
-![](Aspose.Words.c5033568-7b90-4a20-9b5c-280040eed77e.002.jpeg)
+![](media/Aspose.Words.c5033568-7b90-4a20-9b5c-280040eed77e.002.jpeg)
 16 
