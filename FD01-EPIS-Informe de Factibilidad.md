@@ -19,8 +19,7 @@ Poma Machicado, Fabiola Estefani (2021070030) Tapia Vargas, Dylan Yariet (202107
 
 ***2025***
 
-![](Aspose.Words.d79d9a3d-48be-4e6c-84da-6280c4cf54e8.002.png) ![ref2]
-
+![](media/Aspose.Words.d79d9a3d-48be-4e6c-84da-6280c4cf54e8.002.png) ![ref2]
 **Sistema *Aplicación Móvil de Gestión de Finanzas Personales*** 
 
 **Informe de Factibilidad** 
@@ -335,5 +334,5 @@ Beneficios Intangibles
    En  resumen,  el  proyecto  no  solo  tiene  un  sólido  respaldo  técnico  y  una  estrategia  de crecimiento bien definida, sino que también está respaldado por un análisis financiero que demuestra  su  rentabilidad  y  viabilidad.  Con  un  enfoque  en  la  generación  de  ingresos recurrentes  y  un crecimiento gradual, la aplicación tiene un gran potencial para ofrecer valor  a los usuarios y generar beneficios para los inversionistas, asegurando un impacto positivo tanto en el ámbito económico como en la vida financiera de los clientes. 
 16 
 
-[ref1]: Aspose.Words.d79d9a3d-48be-4e6c-84da-6280c4cf54e8.001.png
-[ref2]: Aspose.Words.d79d9a3d-48be-4e6c-84da-6280c4cf54e8.003.png
+[ref1]: media/Aspose.Words.d79d9a3d-48be-4e6c-84da-6280c4cf54e8.001.png
+[ref2]: media/Aspose.Words.d79d9a3d-48be-4e6c-84da-6280c4cf54e8.003.png
