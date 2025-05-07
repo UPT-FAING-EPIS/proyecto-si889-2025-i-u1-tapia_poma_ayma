@@ -89,7 +89,10 @@ class TextInvoiceScreen extends StatelessWidget {
                           }
 
                           // Llamar al método para procesar la factura
-                          await invoiceViewModel.processTextInvoice(inputText);
+                          await invoiceViewModel.processTextInvoice(
+                            inputText,
+                            context,
+                          );
 
                           final message =
                               invoiceViewModel.lastError ??

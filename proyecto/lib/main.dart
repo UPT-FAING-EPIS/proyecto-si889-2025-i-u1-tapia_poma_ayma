@@ -27,10 +27,11 @@ class MyApp extends StatelessWidget {
 
         // Proveedor de InvoiceViewModel para manejar el análisis de facturas
         ChangeNotifierProvider(
-          create: (_) => InvoiceViewModel(
-            apiKey: 'AIzaSyAPwGfQo9eI2KubbXhabdH8ESDRR4s5Llo', // Usa tu API Key
-            userId: '1234', // Usa el ID de usuario que necesites
-          ),
+          create:
+              (_) => InvoiceViewModel(
+                apiKey:
+                    'AIzaSyAPwGfQo9eI2KubbXhabdH8ESDRR4s5Llo', // Usa tu API Key
+              ),
         ),
       ],
       child: MaterialApp.router(

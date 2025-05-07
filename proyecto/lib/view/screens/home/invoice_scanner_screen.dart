@@ -11,8 +11,7 @@ class InvoiceScannerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<InvoiceViewModel>(
-      create:
-          (context) => InvoiceViewModel(apiKey: apiKey, userId: 'Pedro Perez'),
+      create: (context) => InvoiceViewModel(apiKey: apiKey),
       child: Scaffold(
         appBar: AppBar(title: const Text('Escanear Factura')),
         body: const InvoiceScannerBody(),
@@ -69,7 +68,7 @@ class InvoiceScannerBody extends StatelessWidget {
                     icon: const Icon(Icons.photo_library),
                     label: const Text('Galería'),
                     onPressed: () async {
-                      await viewModel.pickAndAnalyzeImageFromGallery();
+                      await viewModel.pickAndAnalyzeImageFromGallery(context);
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
@@ -89,7 +88,7 @@ class InvoiceScannerBody extends StatelessWidget {
                     icon: const Icon(Icons.camera_alt),
                     label: const Text('Cámara'),
                     onPressed: () async {
-                      await viewModel.captureAndAnalyzeImageFromCamera();
+                      await viewModel.captureAndAnalyzeImageFromCamera(context);
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
