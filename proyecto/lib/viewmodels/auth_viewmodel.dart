@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
-import '../services/local_database_service.dart';
+import '../services/firestore_service.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final AuthService _authService = AuthService();
-  final LocalDatabaseService localDbService = LocalDatabaseService();
+  final FirestoreService _firestoreService = FirestoreService();
 
   User? _user;
   User? get user => _user;
@@ -13,14 +13,14 @@ class AuthViewModel extends ChangeNotifier {
   bool _loading = false;
   bool get loading => _loading;
 
-  // Datos locales del usuario (JSON)
-  Map<String, dynamic> _localUserData = {};
-  Map<String, dynamic> get localUserData => _localUserData;
+  // Datos del usuario desde Firestore
+  Map<String, dynamic> _userData = {};
+  Map<String, dynamic> get userData => _userData;
 
-  // Carga la información del usuario desde el JSON
-  Future<void> loadLocalUserData() async {
+  // Carga la información del usuario desde Firestore
+  Future<void> loadUserData() async {
     if (_user != null) {
-      _localUserData = await localDbService.getUserInfoLocally(_user!.uid);
+      _userData = await _firestoreService.getUserInfo(_user!.uid);
       notifyListeners();
     }
   }
@@ -35,24 +35,24 @@ class AuthViewModel extends ChangeNotifier {
     _loading = true;
     notifyListeners();
     try {
-      // Registro con Firebase
-      final userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      // Registro con Firebase Auth
+      final userCredential = await _authService.signUpWithEmail(
+        email,
+        password,
+      );
 
-      // Obtener el UID
-      final uid = userCredential.user?.uid;
-      if (uid != null) {
-        // Guardar datos extra en el JSON local
-        await localDbService.saveUserInfoLocally(
-          uid: uid,
+      if (userCredential != null) {
+        // Guardar datos adicionales en Firestore
+        await _firestoreService.saveUserInfo(
+          uid: userCredential.uid,
           nombreCompleto: fullName,
           email: email,
           telefono: phone,
         );
 
         // Actualizar estado
-        _user = userCredential.user;
-        await loadLocalUserData(); // Cargar datos locales después de registrar
+        _user = userCredential;
+        await loadUserData();
       }
     } catch (e) {
       throw e;
@@ -62,13 +62,44 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  // Inicio de sesión
+  // Inicio de sesión con email y contraseña
   Future<void> login(String email, String password) async {
     _loading = true;
     notifyListeners();
     try {
       _user = await _authService.signInWithEmail(email, password);
-      await loadLocalUserData(); // Cargar datos locales al iniciar sesión
+      await loadUserData();
+    } catch (e) {
+      rethrow;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  // Inicio de sesión con Google
+  Future<void> loginWithGoogle() async {
+    _loading = true;
+    notifyListeners();
+    try {
+      _user = await _authService.signInWithGoogle();
+
+      if (_user != null) {
+        // Verificar si es un usuario nuevo o existente
+        final userDoc = await _firestoreService.getUserInfo(_user!.uid);
+
+        if (userDoc.isEmpty) {
+          // Usuario nuevo - guardar datos en Firestore
+          await _firestoreService.saveUserInfo(
+            uid: _user!.uid,
+            nombreCompleto: _user!.displayName ?? 'Usuario Google',
+            email: _user!.email ?? '',
+            telefono: _user!.phoneNumber ?? '',
+          );
+        }
+
+        await loadUserData();
+      }
     } catch (e) {
       rethrow;
     } finally {
@@ -81,12 +112,12 @@ class AuthViewModel extends ChangeNotifier {
   Future<void> logout() async {
     await _authService.signOut();
     _user = null;
-    _localUserData = {};
+    _userData = {};
     notifyListeners();
   }
 
-  // Actualiza solo los datos locales (JSON)
-  Future<void> updateLocalUserData({
+  // Actualizar datos del usuario en Firestore
+  Future<void> updateUserProfile({
     required String fullName,
     required String phone,
   }) async {
@@ -94,15 +125,15 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       if (_user != null) {
-        await localDbService.updateUserInfoLocally(
+        await _firestoreService.updateUserInfo(
           uid: _user!.uid,
           nombreCompleto: fullName,
           telefono: phone,
         );
-        await loadLocalUserData(); // Recargar datos locales después de la actualización
+        await loadUserData();
       }
     } catch (e) {
-      throw Exception('Error al actualizar datos locales: $e');
+      throw Exception('Error al actualizar perfil: $e');
     } finally {
       _loading = false;
       notifyListeners();
@@ -111,13 +142,4 @@ class AuthViewModel extends ChangeNotifier {
 
   // Escucha los cambios en la sesión
   Stream<User?> get authState => _authService.authStateChanges;
-
-  // Métodos de autenticación social (implementarlos de forma similar si se requiere)
-  Future<void> loginWithGoogle() async {
-    // Implementación que incluya la carga de datos locales al final
-  }
-
-  Future<void> loginWithFacebook() async {
-    // Implementación que incluya la carga de datos locales al final
-  }
 }

@@ -19,12 +19,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     final authViewModel = context.read<AuthViewModel>();
-    // Inicializamos con los valores actuales del JSON
+    // Inicializamos con los valores actuales de Firestore
     _nameController = TextEditingController(
-      text: authViewModel.localUserData['nombre completo'] ?? '',
+      text: authViewModel.userData['nombreCompleto'] ?? '',
     );
     _phoneController = TextEditingController(
-      text: authViewModel.localUserData['telefono'] ?? '',
+      text: authViewModel.userData['telefono'] ?? '',
     );
   }
 
@@ -42,8 +42,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final scaffold = ScaffoldMessenger.of(context);
 
     try {
-      // Actualizar SOLO el JSON local
-      await authViewModel.updateLocalUserData(
+      // Actualizar en Firestore
+      await authViewModel.updateUserProfile(
         fullName: _nameController.text.trim(),
         phone: _phoneController.text.trim(),
       );
@@ -64,7 +64,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final authViewModel = context.watch<AuthViewModel>();
-    final localData = authViewModel.localUserData;
+    final userData = authViewModel.userData;
 
     return Scaffold(
       appBar: AppBar(
@@ -83,19 +83,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           key: _formKey,
           child: Column(
             children: [
-              // Campo de solo lectura (UID del JSON)
+              // Campo de solo lectura (UID)
               _buildReadOnlyField(
                 'ID de Usuario',
-                localData['uid'] ?? 'No disponible',
+                authViewModel.user?.uid ?? 'No disponible',
                 Icons.fingerprint,
               ),
 
               const SizedBox(height: 20),
 
-              // Campo de solo lectura (Email del JSON)
+              // Campo de solo lectura (Email)
               _buildReadOnlyField(
                 'Correo Electrónico',
-                localData['email'] ?? 'No disponible',
+                authViewModel.user?.email ?? 'No disponible',
                 Icons.email,
               ),
 

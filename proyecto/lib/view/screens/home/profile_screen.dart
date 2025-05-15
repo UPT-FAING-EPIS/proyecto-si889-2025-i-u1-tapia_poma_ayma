@@ -9,8 +9,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
-    // Usamos los datos locales guardados en el JSON
-    final Map<String, dynamic> userData = authViewModel.localUserData;
+    // Usamos los datos de Firestore en lugar del JSON local
+    final Map<String, dynamic> userData = authViewModel.userData;
+    final user = authViewModel.user;
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -53,13 +54,15 @@ class ProfileScreen extends StatelessWidget {
                           child: CircleAvatar(
                             radius: 50,
                             backgroundColor: Colors.white,
-                            // Se usa el campo photoURL si existe en los datos locales; de lo contrario se muestra un icono
+                            // Usamos photoURL del usuario de Firebase o de Firestore
                             backgroundImage:
-                                userData['photoURL'] != null
-                                    ? NetworkImage(userData['photoURL'])
+                                (user?.photoURL ?? userData['photoUrl']) != null
+                                    ? NetworkImage(
+                                      (user?.photoURL ?? userData['photoUrl'])!,
+                                    )
                                     : null,
                             child:
-                                userData['photoURL'] == null
+                                (user?.photoURL ?? userData['photoUrl']) == null
                                     ? const Icon(
                                       Icons.person,
                                       size: 50,
@@ -83,9 +86,11 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    // Se usa el campo 'nombre completo' de los datos locales
+                    // Usamos nombreCompleto de Firestore o displayName de Firebase Auth
                     Text(
-                      userData['nombre completo'] ?? 'Usuario',
+                      userData['nombreCompleto'] ??
+                          user?.displayName ??
+                          'Usuario',
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -93,9 +98,9 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    // Se usa el campo 'email' de los datos locales
+                    // Usamos email de Firebase Auth
                     Text(
-                      userData['email'] ?? 'correo@ejemplo.com',
+                      user?.email ?? 'correo@ejemplo.com',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.9),

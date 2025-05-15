@@ -24,23 +24,17 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _loginWithFacebook() async {
-    final authVM = context.read<AuthViewModel>();
-    try {
-      await authVM.loginWithFacebook();
-      context.go('/home');
-    } catch (e) {
-      _showError(e.toString());
-    }
-  }
-
   Future<void> _loginWithGoogle() async {
     final authVM = context.read<AuthViewModel>();
     try {
       await authVM.loginWithGoogle();
-      context.go('/home');
+      if (mounted) {
+        context.go('/home');
+      }
     } catch (e) {
-      _showError(e.toString());
+      if (mounted) {
+        _showError(e.toString());
+      }
     }
   }
 
@@ -189,10 +183,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                          onPressed: _loginWithFacebook,
-                          icon: const Icon(Icons.facebook, size: 32),
-                        ),
                         const SizedBox(width: 16),
                         IconButton(
                           onPressed: _loginWithGoogle,
